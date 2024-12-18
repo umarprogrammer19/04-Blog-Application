@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const NotFound = () => {
+const not-found = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 px-4">
       {/* Card */}
@@ -25,4 +25,4 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
+export default not-found;

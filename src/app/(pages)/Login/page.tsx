@@ -35,8 +35,9 @@ const Login = () => {
         {/* Register Link */}
         <p className="text-center text-gray-600 mt-4">
           Don't have an account?{' '}
+          <a href="/Register" className="text-violet-600 hover:underline">     Register</a>
           <span className="text-violet-600 underline cursor-not-allowed">
-            Register
+        
           </span>
         </p>
       </div>

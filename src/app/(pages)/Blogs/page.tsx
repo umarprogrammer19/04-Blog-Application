@@ -3,7 +3,7 @@ import React from "react";
 const Blogs = () => {
   const cardData = [
     {
-      image: "src/assets/image/Image Placeholder (2).png",
+      image: "public/assets/image/ImagePlaceholder(2).png",
       title: "8 Rules Of Travelling In Sea You Need To Know",
       category: "Travel",
       description:
