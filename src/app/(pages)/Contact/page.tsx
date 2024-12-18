@@ -1,9 +1,3 @@
-import React from "react";
-import 'font-awesome/css/font-awesome.min.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-
-
 
 const Contact = () => {
   return (
@@ -20,7 +14,7 @@ const Contact = () => {
           {/* Office */}
           <div className="bg-white rounded-lg p-6 shadow-md text-center">
             <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center bg-purple-100 text-purple-600 rounded-full">
-          
+
             </div>
             <h3 className="text-lg font-semibold text-purple-600 mb-2">Office</h3>
             <p className="text-gray-600">Victoria Street, London, UK</p>
@@ -96,7 +90,7 @@ const Contact = () => {
               <div className="mt-6">
                 <label className="block text-gray-700 mb-2">Message</label>
                 <textarea
-                  rows="5"
+                  rows={5}
                   className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Write your message here..."
                 ></textarea>

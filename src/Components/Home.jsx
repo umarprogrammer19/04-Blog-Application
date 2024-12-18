@@ -85,21 +85,21 @@ const Home = () => {
         </div>
       </section>
       <section className="py-8 bg-white flex flex-col items-center justify-center">
-  <div className="flex items-center justify-between w-full max-w-4xl px-4">
-    <h3 className="text-3xl font-semibold">Our Recent Posts</h3>
-    <a
-      href="/SingleBlog"
-      className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-300"
-    >
-      View All
-    </a>
-  </div>
-</section>
+        <div className="flex items-center justify-between w-full max-w-4xl px-4">
+          <h3 className="text-3xl font-semibold">Our Recent Posts</h3>
+          <a
+            href="/SingleBlog"
+            className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-300"
+          >
+            View All
+          </a>
+        </div>
+      </section>
 
       {/* Cards Section */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-         
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {cardData.map((card, index) => (
               <div
@@ -134,16 +134,16 @@ const Home = () => {
 
       {/* Popular Post Section */}
       <section className="py-8 bg-white flex flex-col items-center justify-center">
-  <div className="flex items-center justify-between w-full max-w-4xl px-4">
-    <h3 className="text-3xl font-semibold">Popular Posts</h3>
-    <a
-      href="/SingleBlog"
-      className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-300"
-    >
-      View All
-    </a>
-  </div>
-</section>
+        <div className="flex items-center justify-between w-full max-w-4xl px-4">
+          <h3 className="text-3xl font-semibold">Popular Posts</h3>
+          <a
+            href="/SingleBlog"
+            className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-700 transition duration-300"
+          >
+            View All
+          </a>
+        </div>
+      </section>
 
     </div>
   );

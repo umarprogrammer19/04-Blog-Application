@@ -1,5 +1,4 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const NotFound = () => {
   return (
@@ -16,7 +15,7 @@ const NotFound = () => {
         </p>
 
         {/* Button */}
-        <Link to="/">
+        <Link href="/">
           <button className="px-8 py-3 bg-white text-purple-600 rounded-md font-medium hover:bg-gray-200 transition duration-300">
             Go To Home
           </button>
