@@ -1,9 +1,9 @@
-import React from "react";
+import Image from "next/image";
 
 const About = () => {
   return (
     <div className="bg-gray-50">
-      {/* ABOUT  SECTION */}
+      {/* ABOUT SECTION */}
       <section className="text-center py-12 px-4">
         <h2 className="text-sm uppercase text-gray-500 mb-2">About Us</h2>
         <h1 className="text-4xl font-bold text-gray-800 mb-4">
@@ -18,9 +18,11 @@ const About = () => {
 
       {/* IMAGE SECTION */}
       <div className="flex justify-center">
-        <img
-          src="/assets/image/Container.png" // Replace with your image path
+        <Image
+          src="/assets/image/Container.png" // Image path for public folder
           alt="Team working"
+          width={1200} // Adjust width as needed
+          height={800} // Adjust height as needed
           className="w-full max-w-4xl rounded-lg"
         />
       </div>
@@ -80,4 +82,5 @@ const About = () => {
     </div>
   );
 };
+
 export default About;

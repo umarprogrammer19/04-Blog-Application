@@ -1,9 +1,9 @@
-import React from "react";
+import Image from "next/image";
 
 const Blogs = () => {
   const cardData = [
     {
-      image: "public/assets/image/ImagePlaceholder(2).png",
+      image: "/assets/image/ImagePlaceholder(2).png", // Image path for public folder
       title: "8 Rules Of Travelling In Sea You Need To Know",
       category: "Travel",
       description:
@@ -11,7 +11,7 @@ const Blogs = () => {
       link: "#",
     },
     {
-      image: "src/assets/image/Image Placeholder (1).png",
+      image: "/assets/image/ImagePlaceholder(1).png", // Image path for public folder
       title: "How to build strong portfolio and get a Job in UI/UX",
       category: "Design",
       description:
@@ -19,7 +19,7 @@ const Blogs = () => {
       link: "#",
     },
     {
-      image: "src/assets/image/Image Placeholder (2).png",
+      image: "/assets/image/ImagePlaceholder(2).png", // Image path for public folder
       title: "How to Be a Professional Footballer in 2023",
       category: "Sports",
       description:
@@ -55,9 +55,11 @@ const Blogs = () => {
                 key={index}
                 className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
               >
-                <img
+                <Image
                   src={card.image}
                   alt={card.title}
+                  width={500} // Adjust width as needed
+                  height={300} // Adjust height as needed
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-6">
