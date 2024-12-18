@@ -1,7 +1,15 @@
 // ./src/components/Card.js
 import React from "react";
 
-const Card = ({ image, category, title, description, link }) => {
+interface Card {
+  image: string;
+  category: string;
+  title: string;
+  description: string;
+  link: string;
+}
+
+const Card = ({ image, category, title, description, link }: Card) => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
       <img src={image} alt="Card Image" className="w-full h-48 object-cover" />

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Home = () => {
+const HomePage = () => {
   const cardData = [
     {
       image: "src/assets/image/Image Placeholder (2).png",
@@ -149,4 +149,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
