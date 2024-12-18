@@ -78,7 +78,7 @@ const BlogPost = () => {
 
           {/* Secondary Image */}
           <img
-            src="src/assets/image/Image.png"
+            src="/assets/image/Image.png"
             alt="VR Development"
             className="w-full rounded-lg mt-8 mb-6"
           />

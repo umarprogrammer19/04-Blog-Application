@@ -3,7 +3,7 @@ import React from "react";
 const HomePage = () => {
   const cardData = [
     {
-      image: "/assets/image/Image Placeholder (2).png",
+      image: "/assets/image/ImagePlaceholder(2).png",
       title: "8 Rules Of Travelling In Sea You Need To Know",
       category: "Travel",
       description:
@@ -11,7 +11,7 @@ const HomePage = () => {
       link: "#",
     },
     {
-      image: "/assets/image/Image Placeholder (1).png",
+      image: "/assets/image/ImagePlaceholder(1).png",
       title: "How to build strong portfolio and get a Job in UI/UX",
       category: "Design",
       description:
@@ -19,7 +19,7 @@ const HomePage = () => {
       link: "#",
     },
     {
-      image: "/assets/image/Image Placeholder (2).png",
+      image: "/assets/image/ImagePlaceholder(2).png",
       title: "How to Be a Professional Footballer in 2023",
       category: "Sports",
       description:
@@ -46,7 +46,7 @@ const HomePage = () => {
         </div>
         <div className="w-full lg:w-1/2">
           <img
-            src="src/assets/image/Haderimg.png"
+            src="/assets/image/Haderimg.png"
             alt="Featured Post"
             className="w-full h-auto object-cover rounded-lg"
           />
@@ -58,7 +58,7 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="relative rounded-lg overflow-hidden">
             <img
-              src="src/assets/image/Image Placeholder (1).png"
+              src="/assets/image/ImagePlaceholder(1).png"
               alt="VR Game"
               className="w-full h-64 md:h-96 object-cover"
             />

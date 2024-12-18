@@ -19,7 +19,7 @@ const About = () => {
       {/* IMAGE SECTION */}
       <div className="flex justify-center">
         <img
-          src="src/assets/image/Container.png" // Replace with your image path
+          src="/assets/image/Container.png" // Replace with your image path
           alt="Team working"
           className="w-full max-w-4xl rounded-lg"
         />

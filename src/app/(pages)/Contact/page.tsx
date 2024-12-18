@@ -42,7 +42,7 @@ const Contact = () => {
           {/* Background Image */}
           <div
             className="absolute top-0 w-full h-64 md:h-80 bg-cover bg-center z-0"
-            style={{ backgroundImage: "url('src/assets/image/Rectangle 1086.png')" }}
+            style={{ backgroundImage: "url('/assets/image/Rectangle1086.png')" }}
           ></div>
 
           {/* Contact Form */}
