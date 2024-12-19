@@ -24,7 +24,7 @@ const Navbar = () => {
             <a href="/Blogs" className="text-gray-700 hover:text-purple-600 transition">
               Blogs
             </a>
-            <a href="/about" className="text-gray-700 hover:text-purple-600 transition">
+            <a href="/About" className="text-gray-700 hover:text-purple-600 transition">
               About
             </a>
             <a href="/Login" className="text-gray-700 hover:text-purple-600 transition">
@@ -98,7 +98,7 @@ const Navbar = () => {
             <a href="/Blogs" className="text-gray-700 hover:text-purple-600 transition">
               Blogs
             </a>
-            <a href="/about" className="text-gray-700 hover:text-purple-600 transition">
+            <a href="/About" className="text-gray-700 hover:text-purple-600 transition">
               About
             </a>
             <a href="/Login" className="text-gray-700 hover:text-purple-600 transition">
