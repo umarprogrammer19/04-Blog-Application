@@ -2,16 +2,14 @@ import { Card as CardType } from '@/Data/Home-Cards';
 import Image from 'next/image';
 import React from 'react';
 
-interface CardProps {
-  data: CardType;
-}
-
-const Cards: React.FC<CardProps> = ({ data }) => {
+const Cards: React.FC<CardType> = (data) => {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
       <Image
         src={data.image}
         alt={data.title}
+        width={500}
+        height={500}
         className="w-full h-48 sm:h-56 md:h-64 lg:h-48 xl:h-64 object-cover"
       />
       <div className="p-4 md:p-6">
