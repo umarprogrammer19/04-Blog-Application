@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 
 const Register = () => {
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
 
   // Handle image upload and preview
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files![0];
     if (file) {
       setImagePreview(URL.createObjectURL(file));
     }
@@ -23,14 +23,7 @@ const Register = () => {
           {/* First Name Input */}
           <input
             type="text"
-            placeholder="First Name"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-600"
-            required
-          />
-          {/* Last Name Input */}
-          <input
-            type="text"
-            placeholder="Last Name"
+            placeholder="Full Name"
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-600"
             required
           />

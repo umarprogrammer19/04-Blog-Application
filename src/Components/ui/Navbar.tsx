@@ -1,4 +1,5 @@
 "use client"
+import Link from "next/link";
 import React, { useState } from "react";
 
 const Navbar = () => {
@@ -18,31 +19,31 @@ const Navbar = () => {
 
           {/* Desktop Links */}
           <div className="hidden md:flex space-x-6">
-            <a href="/" className="text-gray-700 hover:text-purple-600 transition">
+            <Link href="/" className="text-gray-700 hover:text-purple-600 transition">
               Home
-            </a>
-            <a href="/Blogs" className="text-gray-700 hover:text-purple-600 transition">
+            </Link>
+            <Link href="/Blogs" className="text-gray-700 hover:text-purple-600 transition">
               Blogs
-            </a>
-            <a href="/About" className="text-gray-700 hover:text-purple-600 transition">
+            </Link>
+            <Link href="/About" className="text-gray-700 hover:text-purple-600 transition">
               About
-            </a>
-            <a href="/Login" className="text-gray-700 hover:text-purple-600 transition">
+            </Link>
+            <Link href="/Login" className="text-gray-700 hover:text-purple-600 transition">
               Login
-            </a>
-            <a href="/Register" className="text-gray-700 hover:text-purple-600 transition">
+            </Link>
+            <Link href="/Register" className="text-gray-700 hover:text-purple-600 transition">
               Register
-            </a>
+            </Link>
           </div>
 
           {/* Contact Button */}
           <div className="hidden md:block">
-            <a
+            <Link
               href="/Contact"
               className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition"
             >
               Contact
-            </a>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -92,21 +93,21 @@ const Navbar = () => {
         {/* Mobile Links */}
         <div className={`md:hidden ${isMenuOpen ? "block" : "hidden"}`}>
           <div className="flex flex-col space-y-2 mt-2">
-            <a href="/" className="text-gray-700 hover:text-purple-600 transition">
+            <Link href="/" className="text-gray-700 hover:text-purple-600 transition">
               Home
-            </a>
-            <a href="/Blogs" className="text-gray-700 hover:text-purple-600 transition">
+            </Link>
+            <Link href="/Blogs" className="text-gray-700 hover:text-purple-600 transition">
               Blogs
-            </a>
-            <a href="/About" className="text-gray-700 hover:text-purple-600 transition">
+            </Link>
+            <Link href="/About" className="text-gray-700 hover:text-purple-600 transition">
               About
-            </a>
-            <a href="/Login" className="text-gray-700 hover:text-purple-600 transition">
+            </Link>
+            <Link href="/Login" className="text-gray-700 hover:text-purple-600 transition">
               Login
-            </a>
-            <a href="/Register" className="text-gray-700 hover:text-purple-600 transition">
+            </Link>
+            <Link href="/Register" className="text-gray-700 hover:text-purple-600 transition">
               Register
-            </a>
+            </Link>
             <a
               href="/Contact"
               className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition text-center"
