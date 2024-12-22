@@ -32,12 +32,8 @@ const HomePage = () => {
 
   return (
     <div className="w-full">
-      {/* Home Section */}
       <Hero />
-
-      {/* Recent Blog Post with Overlay */}
       <Section2 />
-
       {/* Recent Posts Section */}
       <section className="pt-12 md:pt-16 lg:pt-24 bg-white flex flex-col items-center">
         <div className="flex justify-between items-center w-full max-w-4xl px-4 sm:px-6">
