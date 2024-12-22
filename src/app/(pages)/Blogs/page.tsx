@@ -47,43 +47,50 @@ const Blogs = () => {
       </section>
 
       {/* Cards Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {cardData.map((card, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-              >
-                <Image
-                  src={card.image}
-                  alt={card.title}
-                  width={500} // Adjust width as needed
-                  height={300} // Adjust height as needed
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6">
-                  <span className="text-xs text-gray-500 uppercase">
-                    {card.category}
-                  </span>
-                  <h2 className="text-lg font-semibold text-gray-800 mt-2">
-                    {card.title}
-                  </h2>
-                  <p className="text-gray-600 mt-3">{card.description}</p>
-                  <a
-                    href={card.link}
-                    className="inline-block mt-4 text-purple-600 font-medium hover:underline"
-                  >
-                    Read More
-                  </a>
-                </div>
-              </div>
-            ))}
+   
+      {/* Cards Section */}
+      <section className="py-12 bg-gray-50">
+  <div className="container mx-auto px-4 max-w-7xl">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {cardData.map((card, index) => (
+        <div
+          key={index}
+          className="bg-white rounded-lg shadow-lg overflow-hidden"
+        >
+          <img
+            src={card.image}
+            alt={card.title}
+            className="w-full h-48 sm:h-56 md:h-64 lg:h-48 xl:h-64 object-cover"
+          />
+          <div className="p-6">
+            <span className="text-xs text-gray-500 uppercase">
+              {card.category}
+            </span>
+            <h2 className="text-lg font-semibold text-gray-800 mt-2 max-w-[300px]">
+              {card.title}
+            </h2>
+            <p className="text-gray-600 mt-3 max-w-[300px]">
+              {card.description}
+            </p>
+            <a
+              href={card.link}
+              className="inline-block mt-4 text-purple-600 font-medium hover:underline"
+            >
+              Read More
+            </a>
           </div>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
     </div>
   );
 };
 
 export default Blogs;
+
+
+
+
+      
