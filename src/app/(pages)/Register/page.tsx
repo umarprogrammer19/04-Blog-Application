@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { toast } from "sonner";
@@ -15,7 +16,7 @@ const Register = () => {
 
   const router = useRouter();
 
-  // Handle image upload and preview
+  // Handle Image (Work Is Remaining);
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
@@ -35,6 +36,12 @@ const Register = () => {
     if (!email) return toast.error("Email is required");
     if (!password) return toast.error("Password is required");
 
+    // Loading
+    const loadingToast = toast("Registering user...", {
+      description: "Please wait...",
+      duration: Infinity,
+    });
+
     try {
       const response = await fetch("http://localhost:8000/user/signup", {
         method: "POST",
@@ -42,9 +49,9 @@ const Register = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          fullname: getFullName.current?.value,
-          email: getEmail.current?.value,
-          password: getPassword.current?.value
+          fullname,
+          email,
+          password,
         }),
       });
 
@@ -58,8 +65,11 @@ const Register = () => {
     } catch (error) {
       console.error(error);
       toast.error("An error occurred during registration");
+    } finally {
+      toast.dismiss(loadingToast);
     }
   };
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -123,9 +133,9 @@ const Register = () => {
 
         <p className="text-center text-gray-600 mt-4">
           Already have an account?{" "}
-          <a href="/Login" className="text-violet-600 hover:underline">
+          <Link href="/Login" className="text-violet-600 hover:underline">
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>
