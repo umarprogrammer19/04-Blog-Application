@@ -1,5 +1,6 @@
 "use client";
 
+import { setCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
@@ -47,10 +48,15 @@ const Login = () => {
         }),
       });
 
-      if (response.status === 200) {
-        const data = await response.json();
-        const { accessToken } = data;
-        localStorage.setItem("accesstoken", accessToken);
+      if (response.ok) {
+        const { accessToken } = await response.json();
+        
+        setCookie('accessToken', accessToken, {
+          path: '/',
+          secure: true,
+          sameSite: 'strict',
+        });
+
         toast.success("Login successful!");
         router.push("/");
       } else {
@@ -58,7 +64,7 @@ const Login = () => {
         toast.error(message);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Login error:", error);
       toast.error("An error occurred during login");
     } finally {
       setIsLoading(false);
