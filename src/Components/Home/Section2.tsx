@@ -1,5 +1,6 @@
-import Image from 'next/image'
-import React from 'react'
+import Image from 'next/image';
+import Link from 'next/link';
+import Button from '../Button';
 
 function Section2() {
     return (
@@ -28,12 +29,7 @@ function Section2() {
                         developing tools and resources, we’re committed to making AI
                         accessible to everyone.
                     </p>
-                    <a
-                        href="/SingleBlog"
-                        className="inline-block mt-4 md:mt-6 bg-transparent text-purple-700 border border-purple-700 hover:text-white py-3 px-8 rounded hover:bg-purple-700 transition duration-300"
-                    >
-                        Read More
-                    </a>
+                    <Button text='Read More'></Button>
                 </div>
             </div>
         </section>

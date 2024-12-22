@@ -1,6 +1,8 @@
 import React from "react";
 import Hero from "./Home/Hero";
 import Section2 from "./Home/Section2";
+import Link from "next/link";
+import Section3 from "./Home/Section3";
 
 const HomePage = () => {
   const cardData = [
@@ -34,18 +36,7 @@ const HomePage = () => {
     <div className="w-full">
       <Hero />
       <Section2 />
-      {/* Recent Posts Section */}
-      <section className="pt-12 md:pt-16 lg:pt-24 bg-white flex flex-col items-center">
-        <div className="flex justify-between items-center w-full max-w-4xl px-4 sm:px-6">
-          <h3 className="text-2xl md:text-3xl font-semibold">Our Recent Posts</h3>
-          <a
-            href="/SingleBlog"
-            className="bg-purple-600 text-white py-2 px-4 md:px-6 rounded-lg hover:bg-purple-700 transition duration-300"
-          >
-            View All
-          </a>
-        </div>
-      </section>
+      <Section3 />
 
       {/* Cards Section */}
       <section className="py-6 md:py-8 lg:py-12 bg-gray-50 mt-20">
