@@ -1,6 +1,7 @@
 "use client"
 import Link from "next/link";
 import React, { useState } from "react";
+import Logout from "./Logout";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,12 +39,7 @@ const Navbar = () => {
 
           {/* Contact Button */}
           <div className="hidden md:block">
-            <Link
-              href="/Contact"
-              className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition"
-            >
-              Contact
-            </Link>
+            <Logout />
           </div>
 
           {/* Mobile Menu Button */}
@@ -108,12 +104,7 @@ const Navbar = () => {
             <Link href="/Register" className="text-gray-700 hover:text-purple-600 transition">
               Register
             </Link>
-            <a
-              href="/Contact"
-              className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition text-center"
-            >
-              Contact
-            </a>
+            <Logout />
           </div>
         </div>
       </div>
