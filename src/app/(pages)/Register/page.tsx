@@ -9,6 +9,7 @@ import { toast } from "sonner";
 const Register = () => {
   const [imagePreview, setImagePreview] = useState<string>("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const getFullName = useRef<HTMLInputElement>(null);
   const getEmail = useRef<HTMLInputElement>(null);
@@ -16,42 +17,58 @@ const Register = () => {
 
   const router = useRouter();
 
-  // Handle Image (Work Is Remaining);
+  // Handle Image Upload
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        return toast.error("File size should be less than 5MB");
+      }
+      if (!file.type.startsWith("image/")) {
+        return toast.error("Please upload a valid image file");
+      }
       setImagePreview(URL.createObjectURL(file));
       setImageFile(file);
     }
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  // Input Validation for Email and Password
+  const validateInputs = () => {
     const fullname = getFullName.current?.value.trim();
     const email = getEmail.current?.value.trim();
     const password = getPassword.current?.value.trim();
 
-    if (!fullname) return toast.error("Full Name is required");
-    if (!email) return toast.error("Email is required");
-    if (!password) return toast.error("Password is required");
+    if (!fullname) return "Full Name is required";
+    if (!email) return "Email is required";
+    if (!password) return "Password is required";
+    if (!/\S+@\S+\.\S+/.test(email)) return "Invalid email format";
+    if (password.length < 6) return "Password should be at least 6 characters long";
+    return null;
+  };
 
-    // Loading
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const validationError = validateInputs();
+    if (validationError) return toast.error(validationError);
+
     const loadingToast = toast("Registering user...", {
       description: "Please wait...",
       duration: Infinity,
     });
 
+    setIsLoading(true);
+
     try {
-      const response = await fetch("http://localhost:8000/user/signup", {
+      const response = await fetch("http://localhost:8000/user/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          fullname,
-          email,
-          password,
+          fullname: getFullName.current?.value,
+          email: getEmail.current?.value,
+          password: getPassword.current?.value,
         }),
       });
 
@@ -59,17 +76,17 @@ const Register = () => {
         toast.success("User registered successfully!");
         router.push("/Login");
       } else {
-        const errorMessage = await response.text();
-        toast.error(errorMessage || "Failed to register user");
+        const { message } = await response.json();
+        toast.error(message);
       }
     } catch (error) {
       console.error(error);
       toast.error("An error occurred during registration");
     } finally {
+      setIsLoading(false);
       toast.dismiss(loadingToast);
     }
   };
-
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -125,9 +142,10 @@ const Register = () => {
           {/* Register Button */}
           <button
             type="submit"
-            className="w-full bg-violet-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-violet-700 transition"
+            className={`w-full bg-violet-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-violet-700 transition ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={isLoading}
           >
-            Register
+            {isLoading ? "Registering..." : "Register"}
           </button>
         </form>
 
