@@ -60,7 +60,7 @@ const Register = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/user/signin", {
+      const response = await fetch("http://localhost:8000/user/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
