@@ -33,7 +33,7 @@ const Register = () => {
   };
 
   // Input Validation for Email and Password
-  const validateInputs = () => {
+  const validateInputs = (): string | null => {
     const fullname = getFullName.current?.value.trim();
     const email = getEmail.current?.value.trim();
     const password = getPassword.current?.value.trim();
@@ -48,36 +48,39 @@ const Register = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+  
     const validationError = validateInputs();
     if (validationError) return toast.error(validationError);
-
+  
+    if (!imageFile) return toast.error("Please upload an image");
+  
     const loadingToast = toast("Registering user...", {
       description: "Please wait...",
       duration: Infinity,
     });
-
+  
     setIsLoading(true);
-
+  
     try {
+      // Create FormData
+      const formData = new FormData();
+      formData.append("fullname", getFullName.current?.value || "");
+      formData.append("email", getEmail.current?.value || "");
+      formData.append("password", getPassword.current?.value || "");
+      formData.append("image", imageFile);
+  
+      // Send the request
       const response = await fetch("http://localhost:8000/user/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fullname: getFullName.current?.value,
-          email: getEmail.current?.value,
-          password: getPassword.current?.value,
-        }),
+        body: formData,
       });
-
+  
       if (response.status === 200) {
         toast.success("User registered successfully!");
         router.push("/Login");
       } else {
-        const { message } = await response.json();
-        toast.error(message);
+        const { messaage } = await response.json();
+        toast.error(messaage || "An error occurred");
       }
     } catch (error) {
       console.error(error);
@@ -87,6 +90,7 @@ const Register = () => {
       toast.dismiss(loadingToast);
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -125,6 +129,7 @@ const Register = () => {
             <input
               type="file"
               accept="image/*"
+              name="image"
               onChange={handleImageChange}
               className="w-full file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200"
             />
