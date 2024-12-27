@@ -46,6 +46,7 @@ export default function FullScreenBlogPostForm() {
                             placeholder="Write your post Content here..."
                             className="w-full min-h-[100px] mt-1"
                             value={description}
+                            rows={6}
                             onChange={(e) => setDescription(e.target.value)}
                         />
                     </div>

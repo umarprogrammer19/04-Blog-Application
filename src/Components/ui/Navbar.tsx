@@ -35,6 +35,9 @@ const Navbar = () => {
             <Link href="/Register" className="text-gray-700 hover:text-purple-600 transition">
               Register
             </Link>
+            <Link href="/Dashboard" className="text-gray-700 hover:text-purple-600 transition">
+              Dashboard
+            </Link>
           </div>
 
           {/* Contact Button */}

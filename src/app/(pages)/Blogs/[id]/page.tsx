@@ -1,33 +1,9 @@
+import Cards from "@/Components/ui/Cards";
+import { cardData } from "@/Data/Home-Cards";
 import React from "react";
 
 const BlogPost = () => {
-  const cardData = [
-    {
-      image: "src/assets/image/Image Placeholder (2).png",
-      title: "8 Rules Of Travelling In Sea You Need To Know",
-      category: "Travel",
-      description:
-        "Travelling in the sea has many advantages, from better scenery to more relaxed settings.",
-      link: "#",
-    },
-    {
-      image: "src/assets/image/Image Placeholder (1).png",
-      title: "How to build strong portfolio and get a Job in UI/UX",
-      category: "Design",
-      description:
-        "Capitalize on key hiring factors and design strategies to land your dream role.",
-      link: "#",
-    },
-    {
-      image: "src/assets/image/Image Placeholder (2).png",
-      title: "How to Be a Professional Footballer in 2023",
-      category: "Sports",
-      description:
-        "Organizing your life to initiate a strong career path in football and sports.",
-      link: "#",
-    },
-  ];
-
+ 
   return (
     <>
       {/* Blog Section */}
@@ -40,11 +16,10 @@ const BlogPost = () => {
           </h1>
           {/* Blog Image */}
           <img
-            src="src/assets/image/Image Placeholder (1).png"
+            src="/assets/image/ImagePlaceholder(2).png"
             alt="VR & AI Technology"
             className="w-screen h-64 object-cover rounded-lg mb-8"
           />
-
 
           {/* Blog Content */}
           <div className="text-gray-600 space-y-6 leading-relaxed">
@@ -105,37 +80,12 @@ const BlogPost = () => {
         </div>
       </section>
 
-
       {/* Cards Section */}
-      <section className="py-12">
+      <section className="py-12 w-[90%] mx-auto">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {cardData.map((card, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-              >
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6">
-                  <span className="text-xs text-gray-500 uppercase">
-                    {card.category}
-                  </span>
-                  <h2 className="text-lg font-semibold text-gray-800 mt-2">
-                    {card.title}
-                  </h2>
-                  <p className="text-gray-600 mt-3">{card.description}</p>
-                  <a
-                    href={card.link}
-                    className="inline-block mt-4 text-purple-600 font-medium hover:underline"
-                  >
-                    Read More
-                  </a>
-                </div>
-              </div>
+              <Cards {...card} key={index} />
             ))}
           </div>
         </div>
