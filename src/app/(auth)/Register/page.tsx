@@ -97,7 +97,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[90vh] bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-center text-3xl font-bold text-violet-700">Register</CardTitle>
