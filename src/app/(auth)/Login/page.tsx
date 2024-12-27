@@ -1,5 +1,8 @@
 "use client";
 
+import { Button } from "@/Components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/Components/ui/card";
+import { Input } from "@/Components/ui/input";
 import { setCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -74,47 +77,45 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      {/* Card Container */}
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-        <h1 className="text-center text-3xl font-bold mb-6 text-violet-700">
+    <Card className="w-full max-w-md">
+      <CardHeader>
+        <CardTitle className="text-center text-3xl font-bold text-violet-700">
           Login
-        </h1>
-        {/* Form Inputs */}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
         <form onSubmit={handleLogin} className="space-y-6">
-          {/* Email Input */}
-          <input
+          <Input
             type="email"
             placeholder="Email"
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-600"
             ref={getEmail}
           />
-          {/* Password Input */}
-          <input
+          <Input
             type="password"
             placeholder="Password"
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-600"
             ref={getPassword}
           />
-
-          {/* Register Button */}
-          <button
+          <Button
             type="submit"
-            className={`w-full bg-violet-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-violet-700 transition ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`w-full bg-violet-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-transparent hover:text-purple-700 border border-purple-700 transition ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
             disabled={isLoading}
           >
             {isLoading ? "Logging In..." : "Login"}
-          </button>
+          </Button>
         </form>
-
-        {/* Register Link */}
-        <p className="text-center text-gray-600 mt-4">
+      </CardContent>
+      <CardFooter>
+        <p className="text-center text-gray-600 w-full">
           Don't have an account?{" "}
           <Link href="/Register" className="text-violet-600 hover:underline">
             Register
           </Link>
         </p>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
+  </div>
   );
 };
 

@@ -133,7 +133,7 @@ const Register = () => {
             </div>
             <Button
               type="submit"
-              className="w-full bg-purple-700 hover:bg-transparent border border-purple-700 hover:text-purple-700"
+              className={`w-full bg-purple-700 hover:bg-transparent border border-purple-700 hover:text-purple-700 ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
               disabled={isLoading}
             >
               {isLoading ? "Registering..." : "Register"}
