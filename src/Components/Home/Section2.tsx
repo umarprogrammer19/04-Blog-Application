@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import Button from '../ui/Button';
+import Button from '../ui/Buttons';
 
 function Section2() {
     return (

@@ -1,5 +1,10 @@
 "use client";
 
+import { Button } from "@/Components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/Components/ui/card";
+import { FileInput } from "@/Components/ui/FileInput";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -48,19 +53,19 @@ const Register = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-  
+
     const validationError = validateInputs();
     if (validationError) return toast.error(validationError);
-  
+
     if (!imageFile) return toast.error("Please upload an image");
-  
+
     const loadingToast = toast("Registering user...", {
       description: "Please wait...",
       duration: Infinity,
     });
-  
+
     setIsLoading(true);
-  
+
     try {
       // Create FormData
       const formData = new FormData();
@@ -68,13 +73,13 @@ const Register = () => {
       formData.append("email", getEmail.current?.value || "");
       formData.append("password", getPassword.current?.value || "");
       formData.append("image", imageFile);
-  
+
       // Send the request
       const response = await fetch("http://localhost:8000/user/signup", {
         method: "POST",
         body: formData,
       });
-  
+
       if (response.status === 200) {
         toast.success("User registered successfully!");
         router.push("/Login");
@@ -90,77 +95,60 @@ const Register = () => {
       toast.dismiss(loadingToast);
     }
   };
-  
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-        <h1 className="text-center text-3xl font-bold mb-6 text-violet-700">
-          Register
-        </h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Full Name Input */}
-          <input
-            type="text"
-            placeholder="Full Name"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-600"
-            ref={getFullName}
-          />
-          {/* Email Input */}
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-600"
-            ref={getEmail}
-          />
-          {/* Password Input */}
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-600"
-            ref={getPassword}
-          />
-
-          {/* Image Upload Field */}
-          <div>
-            <label className="block text-gray-700 font-semibold mb-2">
-              Upload Profile Image
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              name="image"
-              onChange={handleImageChange}
-              className="w-full file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-violet-100 file:text-violet-700 hover:file:bg-violet-200"
-            />
-            {imagePreview && (
-              <Image
-                src={imagePreview}
-                alt="Preview"
-                width={100}
-                height={100}
-                className="w-32 h-32 object-cover mx-auto mt-4 rounded-md"
-              />
-            )}
-          </div>
-
-          {/* Register Button */}
-          <button
-            type="submit"
-            className={`w-full bg-violet-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-violet-700 transition ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-            disabled={isLoading}
-          >
-            {isLoading ? "Registering..." : "Register"}
-          </button>
-        </form>
-
-        <p className="text-center text-gray-600 mt-4">
-          Already have an account?{" "}
-          <Link href="/Login" className="text-violet-600 hover:underline">
-            Login
-          </Link>
-        </p>
-      </div>
+    <div className="flex items-center justify-center min-h-[90vh] bg-gray-100">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-center text-3xl font-bold text-violet-700">Register</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="fullName">Full Name</Label>
+              <Input id="fullName" ref={getFullName} placeholder="Full Name" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" ref={getEmail} placeholder="Email" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" ref={getPassword} placeholder="Password" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="image">Upload Profile Image</Label>
+              <FileInput id="image" accept="image/*" onChange={handleImageChange} />
+              {imagePreview && (
+                <div className="mt-4 flex justify-center">
+                  <Image
+                    src={imagePreview}
+                    alt="Preview"
+                    width={100}
+                    height={100}
+                    className="w-32 h-32 object-cover rounded-md"
+                  />
+                </div>
+              )}
+            </div>
+            <Button
+              type="submit"
+              className="w-full bg-purple-700 hover:bg-transparent border border-purple-700 hover:text-purple-700"
+              disabled={isLoading}
+            >
+              {isLoading ? "Registering..." : "Register"}
+            </Button>
+          </form>
+        </CardContent>
+        <CardFooter>
+          <p className="text-center text-sm text-gray-600 w-full">
+            Already have an account?{" "}
+            <Link href="/Login" className="text-violet-600 hover:underline">
+              Login
+            </Link>
+          </p>
+        </CardFooter>
+      </Card>
     </div>
   );
 };
