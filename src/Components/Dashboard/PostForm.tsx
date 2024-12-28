@@ -1,21 +1,40 @@
-'use client'
+"use client";
+import React from 'react';
 import { Button } from '@/Components/ui/button'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Textarea } from '@/Components/ui/textarea'
 import { ImagePlus, Pencil } from 'lucide-react'
-import { ChangeEvent, useState } from 'react'
+import { useState, useRef } from 'react'
+import { toast } from 'sonner'
 
-export default function FullScreenBlogPostForm() {
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
-    const [image, setImage] = useState<File | null>(null)
+function PostForm() {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [image, setImage] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string>('');
 
-    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setImage(e.target.files[0])
+    const fileInputRef = useRef<HTMLInputElement | null>(null); // Ref to manage file input
+
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files && event.target.files[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                return toast.error('File size should be less than 5MB');
+            }
+            if (!file.type.startsWith('image/')) {
+                return toast.error('Please upload a valid image file');
+            }
+            setImagePreview(URL.createObjectURL(file));
+            setImage(file);
         }
-    }
+    };
+
+    const openFileInput = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click(); // Programmatically open file input
+        }
+    };
 
     return (
         <div className="min-h-screen p-4">
@@ -53,17 +72,20 @@ export default function FullScreenBlogPostForm() {
                     <div>
                         <Label htmlFor="image-upload" className="text-sm font-medium text-gray-700">Add Photo/Video</Label>
                         <div className="mt-1 flex items-center">
-                            <Label htmlFor="image-upload" className="cursor-pointer">
-                                <Button variant="outline" className="mr-2">
-                                    <ImagePlus className="w-5 h-5 mr-2" />
-                                    Choose File
-                                </Button>
-                            </Label>
+                            <Button
+                                variant="outline"
+                                className="mr-2"
+                                onClick={openFileInput} // Trigger file input
+                            >
+                                <ImagePlus className="w-5 h-5 mr-2" />
+                                Choose File
+                            </Button>
                             <Input
                                 id="image-upload"
                                 type="file"
                                 accept="image/*"
                                 className="hidden"
+                                ref={fileInputRef} // Attach ref to input
                                 onChange={handleImageChange}
                             />
                             {image && (
@@ -79,14 +101,14 @@ export default function FullScreenBlogPostForm() {
                             <div className="mt-1 flex items-center">
                                 <span className="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
                                     <img
-                                        src={URL.createObjectURL(image)}
+                                        src={imagePreview}
                                         alt="Selected"
                                         className="h-full w-full object-cover"
                                     />
                                 </span>
                                 <Button
                                     type="button"
-                                    onClick={() => setImage(null)}
+                                    onClick={openFileInput} // Trigger file input
                                     variant="outline"
                                     className="ml-5"
                                 >
@@ -106,3 +128,4 @@ export default function FullScreenBlogPostForm() {
     )
 }
 
+export default PostForm
