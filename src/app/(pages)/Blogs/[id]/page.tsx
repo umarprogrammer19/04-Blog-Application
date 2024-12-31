@@ -1,9 +1,10 @@
 import Cards from "@/Components/ui/Cards";
+import ShowBlogs from "@/Components/ui/ShowBlogs";
 import { cardData } from "@/Data/Home-Cards";
 import React from "react";
 
 const BlogPost = () => {
- 
+
   return (
     <>
       {/* Blog Section */}
@@ -83,11 +84,7 @@ const BlogPost = () => {
       {/* Cards Section */}
       <section className="py-12 w-[90%] mx-auto">
         <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {cardData.map((card, index) => (
-              <Cards {...card} key={index} />
-            ))}
-          </div>
+          <ShowBlogs />
         </div>
       </section>
     </>

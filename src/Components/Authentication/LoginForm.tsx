@@ -58,6 +58,7 @@ function LoginForm() {
           secure: true,
           sameSite: 'strict',
         });
+        localStorage.setItem('accessToken', accessToken);
 
         toast.success("Login successful!");
         router.push("/");

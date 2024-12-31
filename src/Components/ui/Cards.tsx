@@ -3,8 +3,9 @@ import { Card as CardType } from '@/Data/Home-Cards';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { Heart, MessageCircle, Share2 } from 'lucide-react';
+import { BlogType } from './ShowBlogs';
 
-const Cards: React.FC<CardType> = (data) => {
+const Cards: React.FC<BlogType> = (data) => {
   const [isLiked, setIsLiked] = useState(false);
 
   const toggleLike = () => {
@@ -15,7 +16,7 @@ const Cards: React.FC<CardType> = (data) => {
       navigator.share({
         title: data.title,
         text: data.description,
-        url: data.link,
+        url: "",
       });
     } else {
       alert('Sharing not supported in this browser.');
@@ -28,7 +29,7 @@ const Cards: React.FC<CardType> = (data) => {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
       <Image
-        src={data.image}
+        src={data.imageURL}
         alt={data.title}
         width={500}
         height={500}
@@ -36,14 +37,14 @@ const Cards: React.FC<CardType> = (data) => {
       />
       <div className="p-4 md:p-6">
         <span className="text-xs md:text-sm text-gray-500 uppercase">
-          {data.category}
+          {data.createdAt.slice(0, 11)}
         </span>
         <h2 className="text-sm md:text-lg font-semibold text-gray-800 mt-2">
-          {data.title}
+          {data.title.slice(0, 30)}
         </h2>
-        <p className="text-gray-600 mt-2 md:mt-3">{data.description}</p>
+        <p className="text-gray-600 mt-2 md:mt-3">{data.description.slice(0,130)}</p>
         <a
-          href={data.link}
+          href={`/Blogs/${data._id}`}
           className="inline-block mt-3 md:mt-4 text-purple-600 font-medium hover:underline"
         >
           Read More

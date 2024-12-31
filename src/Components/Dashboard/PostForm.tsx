@@ -44,6 +44,9 @@ function PostForm() {
       return toast.error('Please upload an image');
     }
 
+    const getToken = localStorage.getItem('accessToken');
+    if (!getToken) return toast.error('You need to login to publish a blog');
+
     const loadingToast = toast('Publishing blog...', {
       description: 'Please wait...',
       duration: Infinity,
@@ -60,6 +63,9 @@ function PostForm() {
       const response = await fetch('http://localhost:8000/api/v1/addBlog', {
         method: 'POST',
         body: formData,
+        headers: {
+          Authorization: `Bearer ${getToken}`,
+        }
       });
 
       if (response.ok) {
@@ -163,9 +169,8 @@ function PostForm() {
         </div>
         <div className="flex items-center justify-end px-3 py-3 bg-gray-50">
           <Button
-            className={`bg-violet-700 hover:bg-transparent hover:text-violet-700 border border-purple-700 text-white px-5 ${
-              isLoading ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className={`bg-violet-700 hover:bg-transparent hover:text-violet-700 border border-purple-700 text-white px-5 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             onClick={handlePublish}
             disabled={isLoading}
           >
