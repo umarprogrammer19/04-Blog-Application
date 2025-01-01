@@ -10,14 +10,19 @@ export interface BlogType {
     updatedAt: string;
 }
 
-async function ShowBlogs() {
+async function ShowBlogs(props: { show?: number }) {
     const fetchBlogs = await fetch("http://localhost:8000/api/v1/blogs");
     const { blogs } = await fetchBlogs.json();
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {blogs.map((card: BlogType) => <Cards {...card} key={card._id} />)}
+            {blogs
+                .slice(0, props.show)
+                .map((card: BlogType) => (
+                    <Cards {...card} key={card._id} />
+                ))}
         </div>
+
     )
 }
 
-export default ShowBlogs
+export default ShowBlogs;
