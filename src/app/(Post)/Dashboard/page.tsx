@@ -6,6 +6,7 @@ export default function FullScreenBlogPostForm() {
         <div>
             <PostForm />
             <UserBlogs />
+            
         </div>
     );
 }
