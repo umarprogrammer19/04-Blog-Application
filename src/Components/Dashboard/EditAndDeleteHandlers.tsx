@@ -18,6 +18,19 @@ import {
 const EditAndDeleteHandlers = ({ id }: { id: string }) => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [image, setImage] = useState<File | null>(null);
+    
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files && event.target.files[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                return toast.error('File size should be less than 5MB');
+            }
+            if (!file.type.startsWith('image/')) {
+                return toast.error('Please upload a valid image file');
+            }
+            setImage(file);
+        }
+    };
 
     const handleDelete = async () => {
         if (!id) {
@@ -126,7 +139,7 @@ const EditAndDeleteHandlers = ({ id }: { id: string }) => {
                                 <input
                                     type="file"
                                     accept="image/*"
-                                    onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
+                                    onChange={handleImageChange}
                                     className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
                                 />
                             </div>
