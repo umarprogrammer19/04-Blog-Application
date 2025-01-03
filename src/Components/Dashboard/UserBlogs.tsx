@@ -58,7 +58,7 @@ function UserBlogs() {
                     <BlogCard
                         key={blog._id}
                         userName={blog.userRef.fullname || "Unknown User"}
-                        userAvatar={blog.userRef.imageURL}
+                        userAvatar={blog.imageURL}
                         blogTitle={blog.title}
                         blogDescription={blog.description}
                         postedAt={new Date(blog.createdAt)}

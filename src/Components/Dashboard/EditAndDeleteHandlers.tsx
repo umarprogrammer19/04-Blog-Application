@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Button } from "../ui/button";
 import { Edit, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -18,13 +18,13 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Label } from "../ui/label";
 
-const EditAndDeleteHandlers = ({ id }: { id: string }) => {
+const EditAndDeleteHandlers = ({ id }: { id: string; }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [isDeleting, setIsDeleting] = useState(false);
     const [image, setImage] = useState<File | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files && event.target.files[0];
         if (file) {
             if (file.size > 5 * 1024 * 1024) {
@@ -35,9 +35,9 @@ const EditAndDeleteHandlers = ({ id }: { id: string }) => {
             }
             setImage(file);
         }
-    };
+    }, []);
 
-    const handleDelete = async () => {
+    const handleDelete = useCallback(async () => {
         if (!id) {
             return toast.error("Invalid blog ID. Please try again.");
         }
@@ -69,32 +69,47 @@ const EditAndDeleteHandlers = ({ id }: { id: string }) => {
         } finally {
             setIsDeleting(false);
         }
-    };
+    }, [id]);
 
-    const handleEdit = async () => {
+    const handleEdit = useCallback(async () => {
         if (!id) {
             return toast.error("Invalid blog ID. Please try again.");
         }
 
         const accessToken = localStorage.getItem("accessToken");
         if (!accessToken) {
-            return toast.error("You need to login to delete your blogs.");
+            return toast.error("You need to login to edit your blogs.");
         }
 
-        const response = await fetch(`http://localhost:8000/api/v1/edit/${id}`, {
-            method: "PUT",
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
-            },
-        });
+        if (!title && !description && !image) return toast.error("Please enter at least one field.");
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Failed to delete the blog");
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+        if (image) {
+            formData.append('image', image);
         }
 
-    }
+        try {
+            const response = await fetch(`http://localhost:8000/api/v1/edit/${id}`, {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to edit the blog");
+            }
+
+            toast.success("Blog updated successfully!");
+        } catch (error) {
+            toast.error('An error occurred during blog editing');
+        }
+    }, [id, title, description, image]);
+
     return (
         <div className="flex items-center space-x-2">
             {/* Edit Drawer */}
@@ -108,10 +123,9 @@ const EditAndDeleteHandlers = ({ id }: { id: string }) => {
                         <Edit className="h-4 w-4 mr-2" /> Edit Blog
                     </Button>
                 </DrawerTrigger>
-                <DrawerContent
-                    className="fixed inset-0 flex items-center justify-center w-full p-4"
-                >
-                    <div className="w-96 h-screen bg-white rounded-lg shadow-lg p-6">
+
+                <DrawerContent className="fixed inset-0 flex items-center justify-center w-full p-4">
+                    <div className="w-96 h-auto bg-white rounded-lg shadow-lg p-6">
                         <DrawerHeader>
                             <DrawerTitle className="mb-2">Edit Blog</DrawerTitle>
                             <DrawerDescription>Make changes to your blog below.</DrawerDescription>
@@ -139,7 +153,7 @@ const EditAndDeleteHandlers = ({ id }: { id: string }) => {
                                     placeholder="Enter blog description"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                ></Textarea>
+                                />
                             </div>
 
                             {/* Image Upload */}
@@ -164,7 +178,6 @@ const EditAndDeleteHandlers = ({ id }: { id: string }) => {
                         </DrawerFooter>
                     </div>
                 </DrawerContent>
-
             </Drawer>
 
             {/* Delete Button */}
@@ -173,8 +186,7 @@ const EditAndDeleteHandlers = ({ id }: { id: string }) => {
                 size="sm"
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className={`border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition duration-300 ${isDeleting ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
+                className={`border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition duration-300 ${isDeleting ? "opacity-50 cursor-not-allowed" : ""}`}
             >
                 {isDeleting ? (
                     "Deleting..."
