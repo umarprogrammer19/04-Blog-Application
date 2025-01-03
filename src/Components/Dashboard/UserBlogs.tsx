@@ -49,8 +49,6 @@ function UserBlogs() {
         fetchUserBlogs();
     }, [userBlogs]);
 
-
-
     return (
         <div className="w-[80%] mx-auto space-y-8">
             {userBlogs.length === 0 ? (
@@ -64,8 +62,7 @@ function UserBlogs() {
                         blogTitle={blog.title}
                         blogDescription={blog.description}
                         postedAt={new Date(blog.createdAt)}
-                        onDelete={() => console.log("Delete")}
-                        onEdit={() => console.log("Edit")}
+                        id={blog._id}
                     />
                 ))
             )}

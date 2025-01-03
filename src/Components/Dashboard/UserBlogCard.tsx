@@ -1,16 +1,14 @@
-import { Edit, Trash2 } from 'lucide-react'
-import { Button } from "../ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { Card, CardContent, CardFooter, CardHeader } from "../ui/card"
+import EditAndDeleteHandlers from './EditAndDeleteHandlers'
 
 interface BlogCardProps {
-    userName: string
-    userAvatar: string
-    blogTitle: string
-    blogDescription: string
-    postedAt: Date
-    onEdit: () => void
-    onDelete: () => void
+    userName: string;
+    userAvatar: string;
+    blogTitle: string;
+    blogDescription: string;
+    postedAt: Date;
+    id: string;
 }
 
 export function BlogCard({
@@ -19,8 +17,7 @@ export function BlogCard({
     blogTitle,
     blogDescription,
     postedAt,
-    onEdit,
-    onDelete
+    id,
 }: BlogCardProps) {
     return (
         <Card className="w-full border border-gray-300 rounded-lg shadow-sm">
@@ -39,26 +36,7 @@ export function BlogCard({
                         </p>
                     </div>
                 </div>
-                <div className="flex space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={onEdit}
-                        className="border-violet-600 text-violet-600 hover:bg-violet-600 hover:text-white transition duration-300"
-                    >
-                        <Edit className="h-4 w-4 mr-2" />
-                        Edit
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={onDelete}
-                        className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition duration-300"
-                    >
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Delete
-                    </Button>
-                </div>
+                <EditAndDeleteHandlers id={id} />
             </CardHeader>
             <CardContent className="space-y-2">
                 <h3 className="text-2xl font-bold">{blogTitle}</h3>
@@ -70,7 +48,6 @@ export function BlogCard({
                 </p>
             </CardFooter>
         </Card>
-
-    )
-}
+    );
+};
 
