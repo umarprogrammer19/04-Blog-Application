@@ -14,11 +14,16 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "../ui/drawer";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Label } from "../ui/label";
 
 const EditAndDeleteHandlers = ({ id }: { id: string }) => {
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [isDeleting, setIsDeleting] = useState(false);
     const [image, setImage] = useState<File | null>(null);
-    
+
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files && event.target.files[0];
         if (file) {
@@ -106,7 +111,7 @@ const EditAndDeleteHandlers = ({ id }: { id: string }) => {
                 <DrawerContent
                     className="fixed inset-0 flex items-center justify-center w-full p-4"
                 >
-                    <div className="w-96 bg-white rounded-lg shadow-lg p-6">
+                    <div className="w-96 h-screen bg-white rounded-lg shadow-lg p-6">
                         <DrawerHeader>
                             <DrawerTitle className="mb-2">Edit Blog</DrawerTitle>
                             <DrawerDescription>Make changes to your blog below.</DrawerDescription>
@@ -115,32 +120,36 @@ const EditAndDeleteHandlers = ({ id }: { id: string }) => {
                         <div className="space-y-4 mt-4">
                             {/* Title Input */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Title</label>
-                                <input
+                                <Label className="block text-sm font-medium text-gray-700">Title</Label>
+                                <Input
                                     type="text"
-                                    className="border-2 p-3 mt-1 block w-full rounded-md border-zinc-950 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    className="border-2 p-3 mt-1 block w-full rounded-md border-zinc-950 shadow-sm sm:text-sm"
                                     placeholder="Enter blog title"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
                                 />
                             </div>
 
                             {/* Description Input */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Description</label>
-                                <textarea
-                                    className="border-2 p-3 mt-1 block w-full rounded-md border-zinc-950 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm resize-none"
+                                <Label className="block text-sm font-medium text-gray-700">Description</Label>
+                                <Textarea
+                                    className="border-2 p-3 mt-1 block w-full rounded-md border-zinc-950 shadow-sm sm:text-sm resize-none"
                                     rows={4}
                                     placeholder="Enter blog description"
-                                ></textarea>
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                ></Textarea>
                             </div>
 
                             {/* Image Upload */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Image</label>
-                                <input
+                                <Label className="block text-sm font-medium text-gray-700">Image</Label>
+                                <Input
                                     type="file"
                                     accept="image/*"
                                     onChange={handleImageChange}
-                                    className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
+                                    className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:px-4 file:rounded-md file:border file:border-gray-300 file:text-sm file:font-semibold file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
                                 />
                             </div>
                         </div>
