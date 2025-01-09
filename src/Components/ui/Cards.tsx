@@ -1,16 +1,47 @@
 "use client";
-import { Card as CardType } from '@/Data/Home-Cards';
-import Image from 'next/image';
-import React, { useState } from 'react';
-import { Heart, MessageCircle, Share2 } from 'lucide-react';
-import { BlogType } from './ShowBlogs';
+import { useState } from "react";
+import Image from "next/image";
+import { Heart, MessageCircle, Share2 } from "lucide-react";
+import { BlogType } from "./ShowBlogs";
 
 const Cards: React.FC<BlogType> = (data) => {
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(false); // Initial state from server
+  const [likesCount, setLikesCount] = useState(data.likesCount || 0); // Likes count
+  const [isProcessing, setIsProcessing] = useState(false); // To disable button during request
 
-  const toggleLike = () => {
-    setIsLiked((prev) => !prev);
+  const toggleLike = async () => {
+    if (isProcessing) return; // Prevent multiple clicks
+
+    setIsProcessing(true); // Disable button
+
+    try {
+      const response = await fetch("http://localhost:8000/api/v2/like", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Replace with your auth mechanism
+        },
+        body: JSON.stringify({ blogId: data._id }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setIsLiked(result.isLiked);
+        setLikesCount((prev) =>
+          result.isLiked ? prev + 1 : prev - 1
+        );
+      } else {
+        alert(result.message || "Something went wrong.");
+      }
+    } catch (error) {
+      console.error("Error liking/unliking blog:", error);
+      alert("An error occurred. Please try again later.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
@@ -19,13 +50,14 @@ const Cards: React.FC<BlogType> = (data) => {
         url: "",
       });
     } else {
-      alert('Sharing not supported in this browser.');
+      alert("Sharing not supported in this browser.");
     }
   };
 
   const handleComment = () => {
-    alert('Comment functionality coming soon!');
+    alert("Comment functionality coming soon!");
   };
+
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
       <Image
@@ -42,7 +74,9 @@ const Cards: React.FC<BlogType> = (data) => {
         <h2 className="text-sm md:text-lg font-semibold text-gray-800 mt-2">
           {data.title.slice(0, 30)}
         </h2>
-        <p className="text-gray-600 mt-2 md:mt-3">{data.description.slice(0,130)}</p>
+        <p className="text-gray-600 mt-2 md:mt-3">
+          {data.description.slice(0, 130)}
+        </p>
         <a
           href={`/Blogs/${data._id}`}
           className="inline-block mt-3 md:mt-4 text-purple-600 font-medium hover:underline"
@@ -53,15 +87,19 @@ const Cards: React.FC<BlogType> = (data) => {
           {/* Like Button */}
           <button
             onClick={toggleLike}
-            className={`flex items-center space-x-2 text-sm font-medium ${isLiked ? 'text-red-600' : 'text-gray-600'
+            disabled={isProcessing} // Disable button during request
+            className={`flex items-center space-x-2 text-sm font-medium ${isLiked ? "text-red-600" : "text-gray-600"
               } hover:text-red-600 focus:outline-none`}
           >
             <Heart
-              className={`w-5 h-5 transition-colors ${isLiked ? 'fill-red-600 text-red-600' : 'text-gray-600'
+              className={`w-5 h-5 transition-colors ${isLiked ? "fill-red-600 text-red-600" : "text-gray-600"
                 }`}
             />
-            <span>{isLiked ? 'Liked' : 'Like'}</span>
+            <span>{isLiked ? "Liked" : "Like"}</span>
           </button>
+          <span className="text-sm font-medium text-gray-600">
+            {likesCount} {likesCount === 1 ? "Like" : "Likes"}
+          </span>
 
           {/* Comment Button */}
           <button

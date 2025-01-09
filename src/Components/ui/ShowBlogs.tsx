@@ -8,6 +8,7 @@ export interface BlogType {
     imageURL: string;
     createdAt: string;
     updatedAt: string;
+    likesCount: number;
 }
 
 async function ShowBlogs(props: { show?: number }) {
