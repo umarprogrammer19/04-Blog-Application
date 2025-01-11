@@ -9,6 +9,7 @@ export interface BlogType {
     createdAt: string;
     updatedAt: string;
     likesCount: number;
+    like: string[]
 }
 
 async function ShowBlogs(props: { show?: number }) {

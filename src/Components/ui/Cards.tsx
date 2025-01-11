@@ -1,36 +1,53 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { BlogType } from "./ShowBlogs";
 
 const Cards: React.FC<BlogType> = (data) => {
-  const [isLiked, setIsLiked] = useState(false); // Initial state from server
-  const [likesCount, setLikesCount] = useState(data.likesCount || 0); // Likes count
-  const [isProcessing, setIsProcessing] = useState(false); // To disable button during request
+  const [isLiked, setIsLiked] = useState<boolean>(false); // Default false
+  const [likesCount, setLikesCount] = useState(data.likesCount || 0);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  useEffect(() => {
+    const fetchIsLiked = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/v2/blog/${data._id}/isLiked`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        });
+        const result = await response.json();
+        if (response.ok) {
+          setIsLiked(result.isLiked);
+        } else {
+          console.error(result.message || "Failed to fetch like status.");
+        }
+      } catch (error) {
+        console.error("Error fetching like status:", error);
+      }
+    };
+
+    fetchIsLiked();
+  }, [data._id]);
 
   const toggleLike = async () => {
-    if (isProcessing) return; // Prevent multiple clicks
+    if (isProcessing) return;
 
-    setIsProcessing(true); // Disable button
-
+    setIsProcessing(true);
     try {
       const response = await fetch("http://localhost:8000/api/v2/like", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`, // Replace with your auth mechanism
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
         body: JSON.stringify({ blogId: data._id }),
       });
-
       const result = await response.json();
-
       if (response.ok) {
-        setIsLiked(result.isLiked);
-        setLikesCount((prev) =>
-          result.isLiked ? prev + 1 : prev - 1
-        );
+        setIsLiked(result.isLiked); // Update `isLiked` state from response
+        setLikesCount((prev) => (result.isLiked ? prev + 1 : prev - 1));
       } else {
         alert(result.message || "Something went wrong.");
       }
@@ -84,10 +101,9 @@ const Cards: React.FC<BlogType> = (data) => {
           Read More
         </a>
         <div className="mt-4 flex space-x-6">
-          {/* Like Button */}
           <button
             onClick={toggleLike}
-            disabled={isProcessing} // Disable button during request
+            disabled={isProcessing}
             className={`flex items-center space-x-2 text-sm font-medium ${isLiked ? "text-red-600" : "text-gray-600"
               } hover:text-red-600 focus:outline-none`}
           >
@@ -101,7 +117,6 @@ const Cards: React.FC<BlogType> = (data) => {
             {likesCount} {likesCount === 1 ? "Like" : "Likes"}
           </span>
 
-          {/* Comment Button */}
           <button
             onClick={handleComment}
             className="flex items-center space-x-2 text-sm font-medium text-gray-600 hover:text-blue-600 focus:outline-none"
@@ -110,7 +125,6 @@ const Cards: React.FC<BlogType> = (data) => {
             <span>Comment</span>
           </button>
 
-          {/* Share Button */}
           <button
             onClick={handleShare}
             className="flex items-center space-x-2 text-sm font-medium text-gray-600 hover:text-green-600 focus:outline-none"

@@ -1,6 +1,4 @@
-import Cards from "@/Components/ui/Cards";
 import ShowBlogs from "@/Components/ui/ShowBlogs";
-import { cardData } from "@/Data/Home-Cards";
 
 const Blogs = () => {
 
