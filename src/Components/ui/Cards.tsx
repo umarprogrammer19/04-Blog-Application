@@ -5,7 +5,7 @@ import { Heart, MessageCircle, Share2 } from "lucide-react";
 import { BlogType } from "./ShowBlogs";
 
 const Cards: React.FC<BlogType> = (data) => {
-  const [isLiked, setIsLiked] = useState<boolean>(false); // Default false
+  const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likesCount, setLikesCount] = useState(data.likesCount || 0);
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -46,7 +46,7 @@ const Cards: React.FC<BlogType> = (data) => {
       });
       const result = await response.json();
       if (response.ok) {
-        setIsLiked(result.isLiked); // Update `isLiked` state from response
+        setIsLiked(result.isLiked); 
         setLikesCount((prev) => (result.isLiked ? prev + 1 : prev - 1));
       } else {
         alert(result.message || "Something went wrong.");
