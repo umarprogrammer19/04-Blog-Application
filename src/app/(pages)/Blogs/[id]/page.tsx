@@ -1,13 +1,13 @@
-import Image from "next/image"
-import Link from "next/link"
-import ShowBlogs from "@/Components/ui/ShowBlogs"
-import CommentSection from "@/Components/ui/CommentSection"
+import Image from "next/image";
+import Link from "next/link";
+import ShowBlogs from "@/Components/ui/ShowBlogs";
+import CommentSection from "@/Components/ui/CommentSection";
 
 const BlogPost = async ({ params }: { params: { id: string } }) => {
   const { id } = params;
 
-  const res = await fetch(`http://localhost:8000/api/v1/blog/${id}`)
-  const { message } = await res.json()
+  const res = await fetch(`http://localhost:8000/api/v1/blog/${id}`);
+  const { message } = await res.json();
 
   return (
     <>
@@ -17,12 +17,13 @@ const BlogPost = async ({ params }: { params: { id: string } }) => {
           {/* Blog Header */}
           <p className="text-sm text-gray-500 uppercase mb-2">Posted Blog</p>
           <h1 className="text-4xl font-bold text-gray-800 mb-6 leading-snug">
-            {message.title || "How to make a Game look more attractive with New VR & AI Technology"}
+            {message.title || "Untitled Blog"}
           </h1>
+
           {/* Blog Image */}
           <Image
             src={message.imageURL || "/assets/image/ImagePlaceholder(2).png"}
-            alt="VR & AI Technology"
+            alt="Blog Image"
             width={1000}
             height={800}
             className="w-full h-auto object-cover rounded-lg mb-8"
@@ -30,14 +31,11 @@ const BlogPost = async ({ params }: { params: { id: string } }) => {
 
           {/* Blog Content */}
           <div className="text-gray-600 space-y-6 leading-relaxed">
-            <p className="text-lg">
-              {message.description ||
-                "The gaming industry has seen a massive shift in the last decade, with the introduction of Virtual Reality (VR) and Artificial Intelligence (AI) technologies. These technologies have revolutionized the way games are played, offering a more immersive and interactive experience for gamers."}
-            </p>
+            <p className="text-lg">{message.description || "No description available."}</p>
           </div>
 
           {/* Comment Section */}
-          <CommentSection blogId={id} />
+          <CommentSection blogId={id} comments={message.comments || []} />
         </div>
       </div>
 
@@ -63,8 +61,7 @@ const BlogPost = async ({ params }: { params: { id: string } }) => {
         </div>
       </section>
     </>
-  )
-}
+  );
+};
 
-export default BlogPost
-
+export default BlogPost;
