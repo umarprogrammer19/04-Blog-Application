@@ -7,7 +7,6 @@ const BlogPost = async ({ params }: { params: { id: string; } }) => {
 
   const res = await fetch(`http://localhost:8000/api/v1/blog/${id}`);
   const { message } = await res.json();
-  console.log(message);
   return (
     <>
       {/* Blog Section */}
