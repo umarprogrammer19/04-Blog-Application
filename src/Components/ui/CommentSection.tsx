@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { toast } from "sonner"
 
 const CommentSection = ({ blogId }: { blogId: string }) => {
     const [comments, setComments] = useState<any>([])
@@ -13,13 +14,16 @@ const CommentSection = ({ blogId }: { blogId: string }) => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 },
                 body: JSON.stringify({
                     blogId: blogId,
                     content: newComment,
                 }),
+
             })
             const data = await response.json()
+            console.log(data);
             if (response.ok) {
                 setComments([...comments, data.populatedComment])
                 setNewComment("")
@@ -27,8 +31,8 @@ const CommentSection = ({ blogId }: { blogId: string }) => {
                 throw new Error(data.message)
             }
         } catch (error) {
-            console.error("Error posting comment:", error)
-            alert("Failed to post comment. Please try again.")
+            if (error instanceof Error)
+                toast.error(error.message);
         }
     }
 
@@ -55,7 +59,7 @@ const CommentSection = ({ blogId }: { blogId: string }) => {
                     <div key={index} className="bg-white p-4 rounded-lg shadow">
                         <p className="text-gray-800">{comment.content}</p>
                         <p className="text-sm text-gray-500 mt-2">
-                            By {comment.userId.email} on {new Date(comment.createdAt).toLocaleDateString()}
+                            By {comment.userId.fullname} on {new Date(comment.createdAt).toLocaleDateString()}
                         </p>
                     </div>
                 ))}
