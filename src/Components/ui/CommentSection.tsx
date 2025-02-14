@@ -13,7 +13,7 @@ interface Comment {
 }
 
 const CommentSection = ({ blogId, comments }: { blogId: string; comments: Comment[] }) => {
-    const [allComments, setAllComments] = useState<Comment[]>(comments); // State for all comments
+    const [allComments, setAllComments] = useState<Comment[]>(comments);
     const [newComment, setNewComment] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
