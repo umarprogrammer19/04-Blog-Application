@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { Trash2 } from "lucide-react";
 
 interface Comment {
     _id: string;
     userId: {
+        _id: string;
         fullname: string;
     };
     content: string;
@@ -16,6 +18,13 @@ const CommentSection = ({ blogId, comments }: { blogId: string; comments: Commen
     const [allComments, setAllComments] = useState<Comment[]>(comments);
     const [newComment, setNewComment] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const [userId, setUserId] = useState<string | null>(null);
+    console.log(comments);
+
+    useEffect(() => {
+        const storedUserId = localStorage.getItem("current_user_id");
+        if (storedUserId) setUserId(storedUserId);
+    }, []);
 
     const handleSubmitComment = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -49,6 +58,31 @@ const CommentSection = ({ blogId, comments }: { blogId: string; comments: Commen
         }
     };
 
+    const handleDeleteComment = async (commentId: string) => {
+        if (!userId) return toast.error("User not authenticated.");
+        if (!confirm("Are you sure you want to delete this comment?")) return;
+
+        try {
+            const response = await fetch("http://localhost:8000/api/v2/comment/delete", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                },
+                body: JSON.stringify({ commentId }),
+            });
+
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.message);
+
+            // Remove the deleted comment from the state
+            setAllComments((prev) => prev.filter((comment) => comment._id !== commentId));
+            toast.success("Comment deleted successfully!");
+        } catch (error) {
+            if (error instanceof Error) toast.error(error.message);
+        }
+    };
+
     return (
         <div className="mt-12">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Comments</h2>
@@ -76,12 +110,23 @@ const CommentSection = ({ blogId, comments }: { blogId: string; comments: Commen
             <div className="space-y-4">
                 {allComments.length > 0 ? (
                     allComments.map((comment) => (
-                        <div key={comment._id} className="bg-white p-4 rounded-lg shadow">
-                            <p className="text-gray-800">{comment.content}</p>
-                            <p className="text-sm text-gray-500 mt-2">
-                                By {comment.userId?.fullname || "Anonymous"} on{" "}
-                                {new Date(comment.createdAt).toLocaleDateString()}
-                            </p>
+                        <div key={comment._id} className="bg-white p-4 rounded-lg shadow flex justify-between items-center">
+                            <div>
+                                <p className="text-gray-800">{comment.content}</p>
+                                <p className="text-sm text-gray-500 mt-2">
+                                    By {comment.userId?.fullname || "Anonymous"} on{" "}
+                                    {new Date(comment.createdAt).toLocaleDateString()}
+                                </p>
+                            </div>
+
+                            {userId === comment.userId?._id && (
+                                <button
+                                    onClick={() => handleDeleteComment(comment._id)}
+                                    className="text-red-500 hover:text-red-700"
+                                >
+                                    <Trash2 size={20} />
+                                </button>
+                            )}
                         </div>
                     ))
                 ) : (

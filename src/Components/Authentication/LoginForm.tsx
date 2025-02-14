@@ -50,8 +50,9 @@ function LoginForm() {
         }),
       });
 
+
       if (response.ok) {
-        const { accessToken } = await response.json();
+        const { accessToken, user } = await response.json();
 
         setCookie('accessToken', accessToken, {
           path: '/',
@@ -59,6 +60,7 @@ function LoginForm() {
           sameSite: 'strict',
         });
         localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('current_user_id', user._id);
 
         toast.success("Login successful!");
         router.push("/");
