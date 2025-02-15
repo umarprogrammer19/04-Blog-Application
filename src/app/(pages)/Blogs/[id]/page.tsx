@@ -14,7 +14,7 @@ interface BlogData {
 async function getBlogPost(id: string): Promise<BlogData | null> {
   try {
     const res = await fetch(`http://localhost:8000/api/v1/blog/${id}`, {
-      cache: "no-store", // Fetch fresh data
+      cache: "no-store",
     });
 
     if (!res.ok) return null;
@@ -30,7 +30,7 @@ async function getBlogPost(id: string): Promise<BlogData | null> {
 export default async function BlogPost({ params }: { params: { id: string } }) {
   const message = await getBlogPost(params.id);
 
-  if (!message) return notFound(); // Show 404 page if the blog is missing
+  if (!message) return notFound();
 
   return (
     <>

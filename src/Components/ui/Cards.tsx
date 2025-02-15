@@ -1,13 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Heart, MessageCircle, Share2 } from "lucide-react";
+import { Heart, MessageCircle, Router, Share2 } from "lucide-react";
 import { BlogType } from "./ShowBlogs";
+import { useRouter } from "next/navigation";
 
 const Cards: React.FC<BlogType> = (data) => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likesCount, setLikesCount] = useState(data.likesCount || 0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchIsLiked = async () => {
@@ -46,7 +48,7 @@ const Cards: React.FC<BlogType> = (data) => {
       });
       const result = await response.json();
       if (response.ok) {
-        setIsLiked(result.isLiked); 
+        setIsLiked(result.isLiked);
         setLikesCount((prev) => (result.isLiked ? prev + 1 : prev - 1));
       } else {
         alert(result.message || "Something went wrong.");
@@ -69,10 +71,6 @@ const Cards: React.FC<BlogType> = (data) => {
     } else {
       alert("Sharing not supported in this browser.");
     }
-  };
-
-  const handleComment = () => {
-    alert("Comment functionality coming soon!");
   };
 
   return (
@@ -118,7 +116,7 @@ const Cards: React.FC<BlogType> = (data) => {
           </span>
 
           <button
-            onClick={handleComment}
+            onClick={() => router.push(`/Blogs/${data._id}`)}
             className="flex items-center space-x-2 text-sm font-medium text-gray-600 hover:text-blue-600 focus:outline-none"
           >
             <MessageCircle className="w-5 h-5" />
