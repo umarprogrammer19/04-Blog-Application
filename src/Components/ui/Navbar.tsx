@@ -1,118 +1,115 @@
 "use client"
-import Link from "next/link";
-import React, { useState } from "react";
-import Logout from "./Logout";
+import Link from "next/link"
+import { useState } from "react"
+import { Button } from "@/Components/ui/button"
+import { Menu, X } from 'lucide-react'
+import Logout from "./Logout"
 
-const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // Function to toggle menu
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="text-purple-600 font-bold text-2xl">Blogs</div>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <nav className="container flex h-16 items-center justify-between">
+        <Link href="/" className="flex items-center space-x-2">
+          <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
+            DevBlog
+          </span>
+        </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex space-x-6">
-            <Link href="/" className="text-gray-700 hover:text-purple-600 transition">
-              Home
-            </Link>
-            <Link href="/Blogs" className="text-gray-700 hover:text-purple-600 transition">
-              Blogs
-            </Link>
-            <Link href="/About" className="text-gray-700 hover:text-purple-600 transition">
-              About
-            </Link>
-            <Link href="/Login" className="text-gray-700 hover:text-purple-600 transition">
-              Login
-            </Link>
-            <Link href="/Register" className="text-gray-700 hover:text-purple-600 transition">
-              Register
-            </Link>
-            <Link href="/Dashboard" className="text-gray-700 hover:text-purple-600 transition">
-              Dashboard
-            </Link>
-          </div>
-
-          {/* Contact Button */}
-          <div className="hidden md:block">
-            <Logout />
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={toggleMenu}
-              className="text-purple-600 hover:text-purple-800 focus:outline-none"
-              aria-label="Toggle navigation"
+        {/* Desktop Menu */}
+        <div className="hidden md:flex md:items-center md:space-x-8">
+          <div className="flex space-x-6">
+            <Link
+              href="/"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-purple-600"
             >
-              {isMenuOpen ? (
-                // Close Icon
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              ) : (
-                // Hamburger Icon
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16m-7 6h7"
-                  />
-                </svg>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Links */}
-        <div className={`md:hidden ${isMenuOpen ? "block" : "hidden"}`}>
-          <div className="flex flex-col space-y-2 mt-2">
-            <Link href="/" className="text-gray-700 hover:text-purple-600 transition">
               Home
             </Link>
-            <Link href="/Blogs" className="text-gray-700 hover:text-purple-600 transition">
+            <Link
+              href="/Blogs"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-purple-600"
+            >
               Blogs
             </Link>
-            <Link href="/About" className="text-gray-700 hover:text-purple-600 transition">
+            <Link
+              href="/About"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-purple-600"
+            >
               About
             </Link>
-            <Link href="/Login" className="text-gray-700 hover:text-purple-600 transition">
-              Login
+          </div>
+          <div className="flex items-center space-x-4">
+            <Link href="/Login">
+              <Button variant="ghost" className="text-sm font-medium">
+                Sign In
+              </Button>
             </Link>
-            <Link href="/Register" className="text-gray-700 hover:text-purple-600 transition">
-              Register
+            <Link href="/Register">
+              <Button className="bg-purple-600 text-white hover:bg-purple-700">
+                Get Started
+              </Button>
             </Link>
             <Logout />
           </div>
         </div>
-      </div>
-    </nav>
-  );
-};
 
-export default Navbar;
+        {/* Mobile Menu Button */}
+        <button
+          className="block md:hidden"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
+        </button>
+      </nav>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="fixed inset-0 top-16 z-50 bg-background md:hidden">
+          <nav className="container py-6">
+            <div className="flex flex-col space-y-4">
+              <Link
+                href="/"
+                className="text-lg font-medium hover:text-purple-600"
+                onClick={() => setIsOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                href="/Blogs"
+                className="text-lg font-medium hover:text-purple-600"
+                onClick={() => setIsOpen(false)}
+              >
+                Blogs
+              </Link>
+              <Link
+                href="/About"
+                className="text-lg font-medium hover:text-purple-600"
+                onClick={() => setIsOpen(false)}
+              >
+                About
+              </Link>
+              <div className="pt-4 space-y-4">
+                <Link href="/Login" className="block">
+                  <Button variant="ghost" className="w-full justify-start text-lg">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/Register" className="block">
+                  <Button className="w-full bg-purple-600 text-white hover:bg-purple-700">
+                    Get Started
+                  </Button>
+                </Link>
+                <Logout />
+              </div>
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
+  )
+}
