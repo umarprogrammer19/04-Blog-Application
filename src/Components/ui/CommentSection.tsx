@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
-interface Comment {
+export interface Comment {
     _id: string;
     userId: {
         _id: string;
@@ -19,7 +19,6 @@ const CommentSection = ({ blogId, comments }: { blogId: string; comments: Commen
     const [newComment, setNewComment] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [userId, setUserId] = useState<string | null>(null);
-    console.log(comments);
 
     useEffect(() => {
         const storedUserId = localStorage.getItem("current_user_id");

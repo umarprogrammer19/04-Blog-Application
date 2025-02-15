@@ -1,13 +1,36 @@
 import Image from "next/image";
 import Link from "next/link";
 import ShowBlogs from "@/Components/ui/ShowBlogs";
-import CommentSection from "@/Components/ui/CommentSection";
+import CommentSection, { Comment } from "@/Components/ui/CommentSection";
+import { notFound } from "next/navigation";
 
-const BlogPost = async ({ params }: { params: { id: string } }) => {
-  const { id } = params;
+interface BlogData {
+  title: string;
+  imageURL: string;
+  description: string;
+  comments: Comment[];
+}
 
-  const res = await fetch(`http://localhost:8000/api/v1/blog/${id}`);
-  const { message } = await res.json();
+async function getBlogPost(id: string): Promise<BlogData | null> {
+  try {
+    const res = await fetch(`http://localhost:8000/api/v1/blog/${id}`, {
+      cache: "no-store", // Fetch fresh data
+    });
+
+    if (!res.ok) return null;
+
+    const { message } = await res.json();
+    return message;
+  } catch (error) {
+    console.error("Error fetching blog post:", error);
+    return null;
+  }
+}
+
+export default async function BlogPost({ params }: { params: { id: string } }) {
+  const message = await getBlogPost(params.id);
+
+  if (!message) return notFound(); // Show 404 page if the blog is missing
 
   return (
     <>
@@ -35,7 +58,7 @@ const BlogPost = async ({ params }: { params: { id: string } }) => {
           </div>
 
           {/* Comment Section */}
-          <CommentSection blogId={id} comments={message.comments || []} />
+          <CommentSection blogId={params.id} comments={message.comments || []} />
         </div>
       </div>
 
@@ -62,6 +85,4 @@ const BlogPost = async ({ params }: { params: { id: string } }) => {
       </section>
     </>
   );
-};
-
-export default BlogPost;
+}
