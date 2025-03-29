@@ -15,7 +15,6 @@ import {
 } from "./navigation-menu"
 import { Sheet, SheetContent, SheetTrigger } from "./sheet"
 import { Button } from "./button"
-import Logout from "./Logout"
 import { toast } from "sonner"
 
 const routes = [
