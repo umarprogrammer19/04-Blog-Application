@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { ModeToggle } from "./mode-toggle"
 import { Menu, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -15,6 +15,8 @@ import {
 } from "./navigation-menu"
 import { Sheet, SheetContent, SheetTrigger } from "./sheet"
 import { Button } from "./button"
+import Logout from "./Logout"
+import { toast } from "sonner"
 
 const routes = [
   { href: "/", label: "Home" },
@@ -27,6 +29,7 @@ export default function Navbar() {
   const pathname = usePathname()
   const [isScrolled, setIsScrolled] = useState(false)
   const [showNavbar, setShowNavbar] = useState(true)
+
 
   useEffect(() => {
     setShowNavbar(!(pathname === "/login" || pathname === "/signup"))
@@ -44,6 +47,35 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:8000/user/logout", {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        return toast.error("Failed to logout");
+      }
+
+      toast.success("Logged out successfully!");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to Logout");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   if (!showNavbar) {
     return null
@@ -93,9 +125,7 @@ export default function Navbar() {
                 Log in
               </Button>
             </Link>
-            <Link href="/signup">
-              <Button size="sm">Sign up</Button>
-            </Link>
+            <Button onClick={handleLogout} size="sm" className="px-4">{loading ? 'Logging out...' : 'Logout'}</Button>
           </div>
 
           <Sheet>
@@ -131,9 +161,7 @@ export default function Navbar() {
                     Log in
                   </Button>
                 </Link>
-                <Link href="/signup">
-                  <Button className="w-full">Sign up</Button>
-                </Link>
+                <Button onClick={handleLogout} size="sm" className="px-4">{loading ? 'Logging out...' : 'Logout'}</Button>
               </div>
             </SheetContent>
           </Sheet>
