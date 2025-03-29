@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./mode-toggle"
 import { Menu, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -13,8 +12,9 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+} from "./navigation-menu"
+import { Sheet, SheetContent, SheetTrigger } from "./sheet"
+import { Button } from "./button"
 
 const routes = [
   { href: "/", label: "Home" },
@@ -26,7 +26,6 @@ const routes = [
 export default function Navbar() {
   const pathname = usePathname()
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showNavbar, setShowNavbar] = useState(true)
 
   useEffect(() => {
@@ -57,7 +56,7 @@ export default function Navbar() {
         isScrolled ? "bg-background/95 backdrop-blur-md border-b shadow-sm" : "bg-background",
       )}
     >
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-16 items-center justify-between px-6">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center space-x-2">
             <span className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
