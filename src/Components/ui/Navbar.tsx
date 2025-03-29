@@ -1,118 +1,287 @@
 "use client"
-import Link from "next/link";
-import React, { useState } from "react";
-import Logout from "./Logout";
 
-const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
+import { ModeToggle } from "./mode-toggle"
+import { Menu, Search } from "lucide-react"
+import { cn } from "@/lib/utils"
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "./navigation-menu"
+import { Sheet, SheetContent, SheetTrigger } from "./sheet"
+import { Button } from "./button"
+import { toast } from "sonner"
 
-  // Function to toggle menu
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+const routes = [
+  { href: "/", label: "Home" },
+  { href: "/blogs", label: "Blogs" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+]
+
+export default function Navbar() {
+  const pathname = usePathname()
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [showNavbar, setShowNavbar] = useState(true)
+
+
+  useEffect(() => {
+    setShowNavbar(!(pathname === "/login" || pathname === "/signup"))
+  }, [pathname])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsScrolled(true)
+      } else {
+        setIsScrolled(false)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:8000/user/logout", {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        return toast.error("Failed to logout");
+      }
+
+      toast.success("Logged out successfully!");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to Logout");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (!showNavbar) {
+    return null
+  }
 
   return (
-    <nav className="bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="text-purple-600 font-bold text-2xl">Blogs</div>
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        isScrolled ? "bg-background/95 backdrop-blur-md border-b shadow-sm" : "bg-background",
+      )}
+    >
+      <div className="container flex h-16 items-center justify-between px-6">
+        <div className="flex items-center gap-6">
+          <Link href="/" className="flex items-center space-x-2">
+            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              Insight
+            </span>
+          </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex space-x-6">
-            <Link href="/" className="text-gray-700 hover:text-purple-600 transition">
-              Home
-            </Link>
-            <Link href="/Blogs" className="text-gray-700 hover:text-purple-600 transition">
-              Blogs
-            </Link>
-            <Link href="/About" className="text-gray-700 hover:text-purple-600 transition">
-              About
-            </Link>
-            <Link href="/Login" className="text-gray-700 hover:text-purple-600 transition">
-              Login
-            </Link>
-            <Link href="/Register" className="text-gray-700 hover:text-purple-600 transition">
-              Register
-            </Link>
-            <Link href="/Dashboard" className="text-gray-700 hover:text-purple-600 transition">
-              Dashboard
-            </Link>
-          </div>
-
-          {/* Contact Button */}
-          <div className="hidden md:block">
-            <Logout />
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={toggleMenu}
-              className="text-purple-600 hover:text-purple-800 focus:outline-none"
-              aria-label="Toggle navigation"
-            >
-              {isMenuOpen ? (
-                // Close Icon
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              ) : (
-                // Hamburger Icon
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16m-7 6h7"
-                  />
-                </svg>
-              )}
-            </button>
-          </div>
+          <NavigationMenu className="hidden md:flex">
+            <NavigationMenuList>
+              {routes.map((route) => (
+                <NavigationMenuItem key={route.href}>
+                  <Link href={route.href} legacyBehavior passHref>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()} active={pathname === route.href}>
+                      {route.label}
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
 
-        {/* Mobile Links */}
-        <div className={`md:hidden ${isMenuOpen ? "block" : "hidden"}`}>
-          <div className="flex flex-col space-y-2 mt-2">
-            <Link href="/" className="text-gray-700 hover:text-purple-600 transition">
-              Home
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" className="hidden md:flex">
+            <Search className="h-4 w-4" />
+            <span className="sr-only">Search</span>
+          </Button>
+
+          <ModeToggle />
+
+          <div className="hidden md:flex items-center gap-2">
+            <Link href="/login">
+              <Button variant="ghost" size="sm">
+                Log in
+              </Button>
             </Link>
-            <Link href="/Blogs" className="text-gray-700 hover:text-purple-600 transition">
-              Blogs
-            </Link>
-            <Link href="/About" className="text-gray-700 hover:text-purple-600 transition">
-              About
-            </Link>
-            <Link href="/Login" className="text-gray-700 hover:text-purple-600 transition">
-              Login
-            </Link>
-            <Link href="/Register" className="text-gray-700 hover:text-purple-600 transition">
-              Register
-            </Link>
-            <Logout />
+            <Button onClick={handleLogout} size="sm" className="px-4">{loading ? 'Logging out...' : 'Logout'}</Button>
           </div>
+
+          <Sheet>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="flex flex-col">
+              <div className="flex items-center justify-between">
+                <Link href="/" className="flex items-center space-x-2">
+                  <span className="text-xl font-bold">Insight</span>
+                </Link>
+              </div>
+              <nav className="mt-8 flex flex-col gap-4">
+                {routes.map((route) => (
+                  <Link
+                    key={route.href}
+                    href={route.href}
+                    className={cn(
+                      "text-base font-medium transition-colors hover:text-primary",
+                      pathname === route.href ? "text-primary" : "text-muted-foreground",
+                    )}
+                  >
+                    {route.label}
+                  </Link>
+                ))}
+              </nav>
+              <div className="mt-auto pt-4 flex flex-col gap-2">
+                <Link href="/login">
+                  <Button variant="outline" className="w-full">
+                    Log in
+                  </Button>
+                </Link>
+                <Button onClick={handleLogout} size="sm" className="px-4">{loading ? 'Logging out...' : 'Logout'}</Button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-    </nav>
-  );
-};
+    </header>
+  )
+}
 
-export default Navbar;
+// "use client"
+// import Link from "next/link"
+// import { useState } from "react"
+// import { Button } from "@/Components/ui/button"
+// import { Menu, X } from 'lucide-react'
+// import Logout from "./Logout"
+
+// export default function Navbar() {
+//   const [isOpen, setIsOpen] = useState(false)
+
+//   return (
+//     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+//       <nav className="container flex h-16 items-center justify-between">
+//         <Link href="/" className="flex items-center space-x-2">
+//           <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
+//             DevBlog
+//           </span>
+//         </Link>
+
+//         {/* Desktop Menu */}
+//         <div className="hidden md:flex md:items-center md:space-x-8">
+//           <div className="flex space-x-6">
+//             <Link
+//               href="/"
+//               className="text-sm font-medium text-muted-foreground transition-colors hover:text-purple-600"
+//             >
+//               Home
+//             </Link>
+//             <Link
+//               href="/Blogs"
+//               className="text-sm font-medium text-muted-foreground transition-colors hover:text-purple-600"
+//             >
+//               Blogs
+//             </Link>
+//             <Link
+//               href="/About"
+//               className="text-sm font-medium text-muted-foreground transition-colors hover:text-purple-600"
+//             >
+//               About
+//             </Link>
+//           </div>
+//           <div className="flex items-center space-x-4">
+//             <Link href="/Login">
+//               <Button variant="ghost" className="text-sm font-medium">
+//                 Sign In
+//               </Button>
+//             </Link>
+//             <Link href="/Register">
+//               <Button className="bg-purple-600 text-white hover:bg-purple-700">
+//                 Get Started
+//               </Button>
+//             </Link>
+//             <Logout />
+//           </div>
+//         </div>
+
+//         {/* Mobile Menu Button */}
+//         <button
+//           className="block md:hidden"
+//           onClick={() => setIsOpen(!isOpen)}
+//         >
+//           {isOpen ? (
+//             <X className="h-6 w-6" />
+//           ) : (
+//             <Menu className="h-6 w-6" />
+//           )}
+//         </button>
+//       </nav>
+
+//       {/* Mobile Menu */}
+//       {isOpen && (
+//         <div className="fixed inset-0 top-16 z-50 bg-background md:hidden">
+//           <nav className="container py-6">
+//             <div className="flex flex-col space-y-4">
+//               <Link
+//                 href="/"
+//                 className="text-lg font-medium hover:text-purple-600"
+//                 onClick={() => setIsOpen(false)}
+//               >
+//                 Home
+//               </Link>
+//               <Link
+//                 href="/Blogs"
+//                 className="text-lg font-medium hover:text-purple-600"
+//                 onClick={() => setIsOpen(false)}
+//               >
+//                 Blogs
+//               </Link>
+//               <Link
+//                 href="/About"
+//                 className="text-lg font-medium hover:text-purple-600"
+//                 onClick={() => setIsOpen(false)}
+//               >
+//                 About
+//               </Link>
+//               <div className="pt-4 space-y-4">
+//                 <Link href="/Login" className="block">
+//                   <Button variant="ghost" className="w-full justify-start text-lg">
+//                     Sign In
+//                   </Button>
+//                 </Link>
+//                 <Link href="/Register" className="block">
+//                   <Button className="w-full bg-purple-600 text-white hover:bg-purple-700">
+//                     Get Started
+//                   </Button>
+//                 </Link>
+//                 <Logout />
+//               </div>
+//             </div>
+//           </nav>
+//         </div>
+//       )}
+//     </header>
+//   )
+// }
