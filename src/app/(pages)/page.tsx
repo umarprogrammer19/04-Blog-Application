@@ -305,30 +305,7 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      {/* Recent Posts */}
-      <section className="p-20">
-        <div className="container">
-          <FadeIn>
-            <div className="flex flex-col items-center text-center mb-12">
-              <Badge className="mb-4">Latest Articles</Badge>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4">Fresh Perspectives</h2>
-              <p className="max-w-2xl text-muted-foreground text-lg">
-                Stay up-to-date with our newest content, covering the latest developments and insights.
-              </p>
-            </div>
-          </FadeIn>
-
-          {/* <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {recentPosts.map((post) => (
-              <StaggerItem key={post.id}>
-                <BlogCard {...post} />
-              </StaggerItem>
-            ))}
-          </StaggerContainer> */}
-        </div>
-      </section>
-
+      
       {/* Categories Section */}
       <section className="p-20 bg-muted/30">
         <div className="container">
