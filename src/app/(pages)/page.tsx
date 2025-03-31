@@ -219,7 +219,7 @@ export default async function Home() {
                   <div className="space-y-4">
                     <div className="overflow-hidden rounded-lg">
                       <Image
-                        src="/placeholder.svg?height=300&width=300&text=Image+1"
+                        src="/why_choose1.png"
                         alt="Creative content"
                         width={300}
                         height={300}
@@ -228,7 +228,7 @@ export default async function Home() {
                     </div>
                     <div className="overflow-hidden rounded-lg">
                       <Image
-                        src="/placeholder.svg?height=300&width=300&text=Image+2"
+                        src="/why_choose2.png"
                         alt="Creative content"
                         width={300}
                         height={300}
@@ -239,7 +239,7 @@ export default async function Home() {
                   <div className="mt-8 space-y-4">
                     <div className="overflow-hidden rounded-lg">
                       <Image
-                        src="/placeholder.svg?height=300&width=300&text=Image+3"
+                        src="/why_choose3.png"
                         alt="Creative content"
                         width={300}
                         height={300}
@@ -248,7 +248,7 @@ export default async function Home() {
                     </div>
                     <div className="overflow-hidden rounded-lg">
                       <Image
-                        src="/placeholder.svg?height=300&width=300&text=Image+4"
+                        src="/why_choose4.png"
                         alt="Creative content"
                         width={300}
                         height={300}
