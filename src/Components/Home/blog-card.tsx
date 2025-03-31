@@ -24,26 +24,37 @@ interface BlogCardProps {
     }
     image: string
     likes: number
-    comments: number
+    comments: [],
     className?: string
     variant?: "default" | "horizontal"
+    imageURL?: string;
+    description?: string;
+    createdAt?: string;
+    likesCount: number;
+    userRef: {
+        fullname: string;
+        imageURL: string;
+    }
 }
 
 export default function BlogCard({
     id,
     title,
-    excerpt,
-    category,
-    date,
-    author,
-    image,
-    likes,
+    description,
+    likesCount,
+    // excerpt,
+    // category,
+    createdAt,
+    // author,
+    imageURL,
+    // likes,
     comments,
     className,
     variant = "default",
+    userRef
 }: BlogCardProps) {
     const [liked, setLiked] = useState(false)
-    const [likeCount, setLikeCount] = useState(likes)
+    const [likeCount, setLikeCount] = useState(likesCount)
 
     const handleLike = (e: React.MouseEvent) => {
         e.preventDefault()
@@ -70,7 +81,7 @@ export default function BlogCard({
                 <div className={cn("relative", variant === "horizontal" ? "md:w-1/3" : "w-full")}>
                     <div className="aspect-video overflow-hidden">
                         <Image
-                            src={image || "/placeholder.svg"}
+                            src={imageURL || "/placeholder.svg"}
                             alt={title}
                             width={600}
                             height={340}
@@ -78,7 +89,7 @@ export default function BlogCard({
                         />
                     </div>
                     <Badge className="absolute left-3 top-3 bg-primary/80 hover:bg-primary" variant="secondary">
-                        {category}
+                        {"Design"}
                     </Badge>
                 </div>
                 <div className={cn("flex flex-col justify-between p-5", variant === "horizontal" ? "md:w-2/3" : "")}>
@@ -86,18 +97,18 @@ export default function BlogCard({
                         <h3 className="mb-2 line-clamp-2 text-xl font-bold tracking-tight transition-colors group-hover:text-primary">
                             {title}
                         </h3>
-                        <p className="mb-4 line-clamp-2 text-muted-foreground">{excerpt}</p>
+                        <p className="mb-4 line-clamp-2 text-muted-foreground">{description}</p>
                     </div>
                     <div className="mt-auto">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <Avatar className="h-8 w-8">
-                                    <AvatarImage src={author.image} alt={author.name} />
-                                    <AvatarFallback>{author.name[0]}</AvatarFallback>
+                                    <AvatarImage src={userRef.imageURL} alt={userRef.fullname} />
+                                    <AvatarFallback>{userRef.fullname[0]}</AvatarFallback>
                                 </Avatar>
                                 <div className="flex flex-col">
-                                    <span className="text-sm font-medium">{author.name}</span>
-                                    <span className="text-xs text-muted-foreground">{date}</span>
+                                    <span className="text-sm font-medium">{userRef.fullname}</span>
+                                    <span className="text-xs text-muted-foreground">{createdAt?.slice(0,10)}</span>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
@@ -115,7 +126,7 @@ export default function BlogCard({
                                     <MessageCircle className="h-4 w-4 text-muted-foreground" />
                                     <span className="sr-only">Comment</span>
                                 </Button>
-                                <span className="text-xs text-muted-foreground">{comments}</span>
+                                <span className="text-xs text-muted-foreground">{comments.length}</span>
                                 <Button variant="ghost" size="icon" className="h-8 w-8">
                                     <Share2 className="h-4 w-4 text-muted-foreground" />
                                     <span className="sr-only">Share</span>

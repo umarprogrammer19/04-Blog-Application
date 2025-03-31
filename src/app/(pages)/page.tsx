@@ -1,7 +1,3 @@
-// import Hero from "@/Components/Home/Hero";
-// import Section2 from "@/Components/Home/Section2";
-// import Section3 from "@/Components/Home/Section3";
-// import Section4 from "@/Components/Home/Section4";
 
 // export default function Home() {
 //   return (
@@ -13,59 +9,59 @@
 //     </div>
 //   );
 // }
-import Link from "next/link"
-import Image from "next/image"
-import { ArrowRight, ArrowUpRight } from "lucide-react"
-import BlogCard from "@/components/blog-card"
-import { FadeIn, ScaleIn, SlideUp, StaggerContainer, StaggerItem } from "@/components/animations"
-import { Badge } from "@/Components/ui/badge"
-import { Button } from "@/Components/ui/button"
-import { Input } from "@/Components/ui/input"
+import { FadeIn, ScaleIn, SlideUp, StaggerContainer, StaggerItem } from "@/Components/Home/animation";
+import BlogCard from "@/Components/Home/blog-card";
+import { Badge } from "@/Components/ui/badge";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
-const featuredPosts = [
-  {
-    id: "1",
-    title: "The Future of Web Development: Trends to Watch in 2024",
-    excerpt: "Explore the cutting-edge technologies and methodologies that are shaping the future of web development.",
-    category: "Technology",
-    date: "Mar 15, 2024",
-    author: {
-      name: "Alex Morgan",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    image: "/placeholder.svg?height=400&width=600&text=Web+Development",
-    likes: 124,
-    comments: 23,
-  },
-  {
-    id: "2",
-    title: "Designing for Accessibility: A Comprehensive Guide",
-    excerpt: "Learn how to create inclusive digital experiences that work for everyone, regardless of ability.",
-    category: "Design",
-    date: "Mar 12, 2024",
-    author: {
-      name: "Jamie Chen",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    image: "/placeholder.svg?height=400&width=600&text=Accessibility",
-    likes: 98,
-    comments: 15,
-  },
-  {
-    id: "3",
-    title: "The Psychology of Productivity: Maximizing Your Workflow",
-    excerpt: "Discover science-backed strategies to enhance your productivity and achieve more in less time.",
-    category: "Productivity",
-    date: "Mar 10, 2024",
-    author: {
-      name: "Sam Wilson",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    image: "/placeholder.svg?height=400&width=600&text=Productivity",
-    likes: 87,
-    comments: 12,
-  },
-]
+// const featuredPosts = [
+//   {
+//     id: "1",
+//     title: "The Future of Web Development: Trends to Watch in 2024",
+//     excerpt: "Explore the cutting-edge technologies and methodologies that are shaping the future of web development.",
+//     category: "Technology",
+//     date: "Mar 15, 2024",
+//     author: {
+//       name: "Alex Morgan",
+//       image: "/placeholder.svg?height=40&width=40",
+//     },
+//     image: "/placeholder.svg?height=400&width=600&text=Web+Development",
+//     likes: 124,
+//     comments: 23,
+//   },
+//   {
+//     id: "2",
+//     title: "Designing for Accessibility: A Comprehensive Guide",
+//     excerpt: "Learn how to create inclusive digital experiences that work for everyone, regardless of ability.",
+//     category: "Design",
+//     date: "Mar 12, 2024",
+//     author: {
+//       name: "Jamie Chen",
+//       image: "/placeholder.svg?height=40&width=40",
+//     },
+//     image: "/placeholder.svg?height=400&width=600&text=Accessibility",
+//     likes: 98,
+//     comments: 15,
+//   },
+//   {
+//     id: "3",
+//     title: "The Psychology of Productivity: Maximizing Your Workflow",
+//     excerpt: "Discover science-backed strategies to enhance your productivity and achieve more in less time.",
+//     category: "Productivity",
+//     date: "Mar 10, 2024",
+//     author: {
+//       name: "Sam Wilson",
+//       image: "/placeholder.svg?height=40&width=40",
+//     },
+//     image: "/placeholder.svg?height=400&width=600&text=Productivity",
+//     likes: 87,
+//     comments: 12,
+//   },
+// ]
 
 const recentPosts = [
   {
@@ -121,11 +117,24 @@ const categories = [
   { name: "Career", count: 31, color: "bg-indigo-500" },
 ]
 
-export default function Home() {
+export default async function Home() {
+  // const [featuredPosts, setFeaturedPost] = useState([]);
+  const posts = await fetch("http://localhost:8000/api/v1/blogs", {
+    cache: "no-store",
+  });
+
+  if (!posts.ok) {
+    throw new Error("Failed to fetch blogs.");
+  }
+
+  const { blogs } = await posts.json();
+  const featuredPosts = blogs;
+  console.log(featuredPosts);
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-background py-20 md:py-32">
+      <section className="relative overflow-hidden bg-background p-20 md:p-32">
         <div className="container relative z-10">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-8 items-center">
             <FadeIn direction="right">
@@ -154,7 +163,7 @@ export default function Home() {
               <div className="relative">
                 <div className="relative overflow-hidden rounded-lg">
                   <Image
-                    src="/placeholder.svg?height=600&width=800&text=Hero+Image"
+                    src="/Hero.avif"
                     alt="Hero"
                     width={800}
                     height={600}
@@ -162,8 +171,6 @@ export default function Home() {
                     priority
                   />
                 </div>
-                <div className="absolute -bottom-6 -left-6 h-24 w-24 rounded-full bg-primary/20 backdrop-blur-xl" />
-                <div className="absolute -top-6 -right-6 h-32 w-32 rounded-full bg-secondary/20 backdrop-blur-xl" />
               </div>
             </FadeIn>
           </div>
@@ -172,7 +179,7 @@ export default function Home() {
       </section>
 
       {/* Featured Posts */}
-      <section className="py-20">
+      <section className="p-20">
         <div className="container">
           <FadeIn>
             <div className="flex flex-col items-center text-center mb-12">
@@ -185,7 +192,7 @@ export default function Home() {
           </FadeIn>
 
           <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {featuredPosts.map((post) => (
+            {featuredPosts.map((post: any) => (
               <StaggerItem key={post.id}>
                 <BlogCard {...post} />
               </StaggerItem>
@@ -203,7 +210,7 @@ export default function Home() {
       </section>
 
       {/* Creative Section */}
-      <section className="py-20 bg-muted/30">
+      <section className="p-20 bg-muted/30">
         <div className="container">
           <div className="grid gap-12 lg:grid-cols-2 items-center">
             <ScaleIn>
@@ -300,7 +307,7 @@ export default function Home() {
       </section>
 
       {/* Recent Posts */}
-      <section className="py-20">
+      <section className="p-20">
         <div className="container">
           <FadeIn>
             <div className="flex flex-col items-center text-center mb-12">
@@ -312,18 +319,18 @@ export default function Home() {
             </div>
           </FadeIn>
 
-          <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {/* <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {recentPosts.map((post) => (
               <StaggerItem key={post.id}>
                 <BlogCard {...post} />
               </StaggerItem>
             ))}
-          </StaggerContainer>
+          </StaggerContainer> */}
         </div>
       </section>
 
       {/* Categories Section */}
-      <section className="py-20 bg-muted/30">
+      <section className="p-20 bg-muted/30">
         <div className="container">
           <FadeIn>
             <div className="flex flex-col items-center text-center mb-12">
@@ -356,7 +363,7 @@ export default function Home() {
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-20">
+      <section className="p-20">
         <div className="container">
           <div className="rounded-xl bg-primary/5 p-8 md:p-12">
             <div className="grid gap-8 md:grid-cols-2 items-center">
