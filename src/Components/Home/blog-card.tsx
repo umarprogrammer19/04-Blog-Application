@@ -1,8 +1,6 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
@@ -13,55 +11,92 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
 import { cn } from "@/lib/utils"
 
 interface BlogCardProps {
-    id: string
+    _id: string
     title: string
-    excerpt: string
-    category: string
-    date: string
-    author: {
-        name: string
-        image: string
-    }
-    image: string
-    likes: number
-    comments: [],
+    description: string
+    createdAt?: string
+    imageURL?: string
+    likesCount: number
+    comments: any[]
     className?: string
     variant?: "default" | "horizontal"
-    imageURL?: string;
-    description?: string;
-    createdAt?: string;
-    likesCount: number;
     userRef: {
-        fullname: string;
-        imageURL: string;
+        fullname: string
+        imageURL: string
     }
 }
 
 export default function BlogCard({
-    id,
+    _id,
     title,
     description,
     likesCount,
-    // category,
     createdAt,
     imageURL,
     comments,
     className,
     variant = "default",
-    userRef
+    userRef,
 }: BlogCardProps) {
     const [liked, setLiked] = useState(false)
     const [likeCount, setLikeCount] = useState(likesCount)
+    const [isProcessing, setIsProcessing] = useState(false)
 
-    const handleLike = (e: React.MouseEvent) => {
+    useEffect(() => {
+        const fetchIsLiked = async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/api/v2/blog/${_id}/isLiked`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    },
+                })
+                const result = await response.json()
+                if (response.ok) {
+                    setLiked(result.isLiked)
+                } else {
+                    console.error(result.message || "Failed to fetch like status.")
+                }
+            } catch (error) {
+                console.error("Error fetching like status:", error)
+            }
+        }
+
+        fetchIsLiked()
+    }, [_id])
+
+    const toggleLike = async (e: React.MouseEvent) => {
         e.preventDefault()
         e.stopPropagation()
-        if (liked) {
-            setLikeCount(likeCount - 1)
-        } else {
-            setLikeCount(likeCount + 1)
+
+        if (isProcessing) return
+
+        setIsProcessing(true)
+        try {
+            const response = await fetch("http://localhost:8000/api/v2/like", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                },
+                body: JSON.stringify({ blogId: _id }),
+            })
+            const result = await response.json()
+            if (response.ok) {
+                if (result.isLiked) {
+                    setLikeCount((prev) => prev + 1)
+                } else {
+                    setLikeCount((prev) => prev - 1)
+                }
+                setLiked(result.isLiked)
+            } else {
+                alert(result.message || "Something went wrong.")
+            }
+        } catch (error) {
+            console.error("Error liking/unliking blog:", error)
+            alert("An error occurred. Please try again later.")
+        } finally {
+            setIsProcessing(false)
         }
-        setLiked(!liked)
     }
 
     return (
@@ -74,7 +109,7 @@ export default function BlogCard({
                 className,
             )}
         >
-            <Link href={`/blogs/${id}`} className="block h-full w-full">
+            <Link href={`/blogs/${_id}`} className="block h-full w-full">
                 <div className={cn("relative", variant === "horizontal" ? "md:w-1/3" : "w-full")}>
                     <div className="aspect-video overflow-hidden">
                         <Image
@@ -105,11 +140,11 @@ export default function BlogCard({
                                 </Avatar>
                                 <div className="flex flex-col">
                                     <span className="text-sm font-medium">{userRef.fullname}</span>
-                                    <span className="text-xs text-muted-foreground">{createdAt?.slice(0,10)}</span>
+                                    <span className="text-xs text-muted-foreground">{createdAt?.slice(0, 10)}</span>
                                 </div>
                             </div>
                             <div className="flex items-center gap-2">
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleLike}>
+                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={toggleLike}>
                                     <Heart
                                         className={cn(
                                             "h-4 w-4 transition-colors",
@@ -136,4 +171,3 @@ export default function BlogCard({
         </motion.div>
     )
 }
-

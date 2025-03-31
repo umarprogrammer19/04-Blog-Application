@@ -1,14 +1,3 @@
-
-// export default function Home() {
-//   return (
-//     <div className="w-full">
-//       <Hero />
-//       <Section2 />
-//       <Section3 />
-//       <Section4 />
-//     </div>
-//   );
-// }
 import { FadeIn, ScaleIn, SlideUp, StaggerContainer, StaggerItem } from "@/Components/Home/animation";
 import BlogCard from "@/Components/Home/blog-card";
 import { Badge } from "@/Components/ui/badge";
@@ -17,96 +6,6 @@ import { Input } from "@/Components/ui/input";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
-// const featuredPosts = [
-//   {
-//     id: "1",
-//     title: "The Future of Web Development: Trends to Watch in 2024",
-//     excerpt: "Explore the cutting-edge technologies and methodologies that are shaping the future of web development.",
-//     category: "Technology",
-//     date: "Mar 15, 2024",
-//     author: {
-//       name: "Alex Morgan",
-//       image: "/placeholder.svg?height=40&width=40",
-//     },
-//     image: "/placeholder.svg?height=400&width=600&text=Web+Development",
-//     likes: 124,
-//     comments: 23,
-//   },
-//   {
-//     id: "2",
-//     title: "Designing for Accessibility: A Comprehensive Guide",
-//     excerpt: "Learn how to create inclusive digital experiences that work for everyone, regardless of ability.",
-//     category: "Design",
-//     date: "Mar 12, 2024",
-//     author: {
-//       name: "Jamie Chen",
-//       image: "/placeholder.svg?height=40&width=40",
-//     },
-//     image: "/placeholder.svg?height=400&width=600&text=Accessibility",
-//     likes: 98,
-//     comments: 15,
-//   },
-//   {
-//     id: "3",
-//     title: "The Psychology of Productivity: Maximizing Your Workflow",
-//     excerpt: "Discover science-backed strategies to enhance your productivity and achieve more in less time.",
-//     category: "Productivity",
-//     date: "Mar 10, 2024",
-//     author: {
-//       name: "Sam Wilson",
-//       image: "/placeholder.svg?height=40&width=40",
-//     },
-//     image: "/placeholder.svg?height=400&width=600&text=Productivity",
-//     likes: 87,
-//     comments: 12,
-//   },
-// ]
-
-const recentPosts = [
-  {
-    id: "4",
-    title: "Mastering CSS Grid: Advanced Layout Techniques",
-    excerpt: "Take your CSS Grid skills to the next level with these advanced techniques and practical examples.",
-    category: "Development",
-    date: "Mar 8, 2024",
-    author: {
-      name: "Taylor Swift",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    image: "/placeholder.svg?height=400&width=600&text=CSS+Grid",
-    likes: 76,
-    comments: 9,
-  },
-  {
-    id: "5",
-    title: "The Rise of AI in Content Creation",
-    excerpt: "How artificial intelligence is transforming the way we create and consume content online.",
-    category: "AI",
-    date: "Mar 5, 2024",
-    author: {
-      name: "Jordan Lee",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    image: "/placeholder.svg?height=400&width=600&text=AI+Content",
-    likes: 112,
-    comments: 18,
-  },
-  {
-    id: "6",
-    title: "Building a Personal Brand as a Developer",
-    excerpt: "Strategies for establishing your professional identity and standing out in a competitive industry.",
-    category: "Career",
-    date: "Mar 3, 2024",
-    author: {
-      name: "Casey Kim",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    image: "/placeholder.svg?height=400&width=600&text=Personal+Brand",
-    likes: 94,
-    comments: 14,
-  },
-]
 
 const categories = [
   { name: "Technology", count: 42, color: "bg-blue-500" },
@@ -118,7 +17,6 @@ const categories = [
 ]
 
 export default async function Home() {
-  // const [featuredPosts, setFeaturedPost] = useState([]);
   const posts = await fetch("http://localhost:8000/api/v1/blogs", {
     cache: "no-store",
   });
@@ -305,7 +203,7 @@ export default async function Home() {
           </div>
         </div>
       </section>
-      
+
       {/* Categories Section */}
       <section className="p-20 bg-muted/30">
         <div className="container">
