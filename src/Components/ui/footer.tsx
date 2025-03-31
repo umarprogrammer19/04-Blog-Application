@@ -1,48 +1,107 @@
-import Link from "next/link";
-import React from "react";
+import { Facebook, Instagram, Linkedin, Mail, Twitter } from "lucide-react"
+import Link from "next/link"
+import { Button } from "./button"
+import { Input } from "./input"
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <div className="w-full bg-white border-t border-gray-200">
-      {/* Footer Container */}
-      <div className="max-w-7xl mx-auto py-8 flex flex-col items-center">
-        {/* Logo */}
-        <div className="mb-4">
-          <h1 className="text-4xl font-bold text-purple-600">Blogging app</h1>
+    <footer className="w-full border-t bg-background px-6">
+      <div className="container py-10">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+          <div className="flex flex-col gap-2">
+            <Link href="/" className="flex items-center space-x-2">
+              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                Insight
+              </span>
+            </Link>
+            <p className="text-sm text-muted-foreground mt-2">
+              A professional platform for sharing knowledge, ideas, and insights with the world.
+            </p>
+            <div className="flex space-x-4 mt-4">
+              <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Facebook className="h-5 w-5" />
+                <span className="sr-only">Facebook</span>
+              </Link>
+              <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Twitter className="h-5 w-5" />
+                <span className="sr-only">Twitter</span>
+              </Link>
+              <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Instagram className="h-5 w-5" />
+                <span className="sr-only">Instagram</span>
+              </Link>
+              <Link href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <Linkedin className="h-5 w-5" />
+                <span className="sr-only">LinkedIn</span>
+              </Link>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/blogs" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Blogs
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Legal</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Cookie Policy
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Subscribe</h3>
+            <p className="text-sm text-muted-foreground mb-4">Stay updated with our latest articles and news.</p>
+            <div className="flex flex-col space-y-2">
+              <div className="flex">
+                <Input type="email" placeholder="Your email" className="rounded-r-none" />
+                <Button className="rounded-l-none">
+                  <Mail className="h-4 w-4" />
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">By subscribing, you agree to our Privacy Policy.</p>
+            </div>
+          </div>
         </div>
-   
-
-        {/* Navigation Links */}
-        <ul className="flex text-lg font-semibold space-x-10 mb-6 text-zinc-950">
-          <Link href={"/"} className="hover:text-purple-600 cursor-pointer">Home</Link>
-          <Link href={"/Blogs"} className="hover:text-purple-600 cursor-pointer">Blog</Link>
-          <Link href={"/About"} className="hover:text-purple-600 cursor-pointer">About</Link>
-          <Link href={"/Contact"} className="hover:text-purple-600 cursor-pointer">Contact Us</Link>
-        </ul>
-
-        {/* Social Media Icons */}
-        <div className="flex space-x-4 mb-6">
-          <div className="w-10 h-10 flex items-center justify-center rounded-full bg-purple-600 text-white cursor-pointer hover:bg-purple-700">
-            FB
-          </div>
-          <div className="w-10 h-10 flex items-center justify-center rounded-full bg-purple-600 text-white cursor-pointer hover:bg-purple-700">
-            IG
-          </div>
-          <div className="w-10 h-10 flex items-center justify-center rounded-full bg-purple-600 text-white cursor-pointer hover:bg-purple-700">
-            LN
-          </div>
-          <div className="w-10 h-10 flex items-center justify-center rounded-full bg-purple-600 text-white cursor-pointer hover:bg-purple-700">
-            YT
-          </div>
-        </div>
-
-        {/* Copyright */}
-        <div className="text-gray-500 text-sm">
-          © 2024 Blogging. All Right Reserved
+        <div className="mt-8 border-t pt-6">
+          <p className="text-center text-sm text-muted-foreground">
+            © {new Date().getFullYear()} Insight. All rights reserved.
+          </p>
         </div>
       </div>
-    </div>
-  );
-};
+    </footer>
+  )
+}
 
-export default Footer;
