@@ -87,15 +87,15 @@
 //   );
 // }
 
+import { FadeIn, StaggerContainer, StaggerItem } from "@/Components/Home/animation"
+import BlogCard from "@/Components/Home/blog-card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
+import { Badge } from "@/Components/ui/badge"
+import { Button } from "@/Components/ui/button"
+import { Textarea } from "@/Components/ui/textarea"
+import { Bookmark, Facebook, Heart, Linkedin, MessageCircle, Reply, Share2, ThumbsUp, Twitter } from "lucide-react"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { Button } from "@/Components/ui/button"
-import { Badge } from "@/Components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
-import { Textarea } from "@/Components/ui/textarea"
-import { Heart, MessageCircle, Share2, Bookmark, Facebook, Twitter, Linkedin, ThumbsUp, Reply } from "lucide-react"
-import BlogCard from "@/Components/Home/blog-card"
-import { FadeIn, StaggerContainer, StaggerItem } from "@/Components/Home/animation"
 
 // Mock data for the blog post
 const blogPosts = [
@@ -250,16 +250,14 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
 
   return (
     <div className="flex flex-col">
-      <article className="py-10 md:py-16">
-        <div className="container max-w-4xl">
+      <article className="p-10 md:p-16">
+        <div className="container max-w-4xl mx-auto">
           <FadeIn>
             <div className="mb-8 text-center">
               <Badge className="mb-4">{post.category || "Design"}</Badge>
               <h1 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">{post.title}</h1>
               <div className="flex items-center justify-center gap-2 text-muted-foreground">
                 <span>{post.createdAt.slice(0, 10)}</span>
-                <span>•</span>
-                {/* <span>{post.readTime}</span> */}
               </div>
             </div>
           </FadeIn>
@@ -350,37 +348,12 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
               </div>
             </div>
           </FadeIn>
-
-          {/* Author Bio */}
-          <FadeIn>
-            <div className="mt-12 p-6 bg-muted/30 rounded-xl">
-              <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start">
-                <Avatar className="h-16 w-16">
-                  <AvatarImage src={post.userRef.imageURL} alt={post.userRef.fullname} />
-                  <AvatarFallback>{post.userRef.fullname[0]}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="text-xl font-bold">{post.userRef.fullname}</h3>
-                  <p className="text-sm text-muted-foreground mb-2">{"Admin"}</p>
-                  <p>{post.userRef.bio || "Fullstack Developer"}</p>
-                  <div className="flex gap-2 mt-4">
-                    <Button variant="outline" size="sm">
-                      Follow
-                    </Button>
-                    <Button variant="ghost" size="sm">
-                      More articles
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </FadeIn>
         </div>
       </article>
 
       {/* Comments Section */}
-      <section className="py-10 bg-muted/30">
-        <div className="container max-w-4xl">
+      <section className="p-10 bg-muted/30">
+        <div className="container max-w-4xl mx-auto">
           <FadeIn>
             <h2 className="text-2xl font-bold mb-6">Comments ({comments.length})</h2>
 
@@ -463,7 +436,7 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
       </section>
 
       {/* Related Posts */}
-      <section className="py-16">
+      <section className="p-16">
         <div className="container">
           <FadeIn>
             <div className="flex flex-col items-center text-center mb-12">
@@ -473,13 +446,13 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
             </div>
           </FadeIn>
 
-          {/* <StaggerContainer className="grid gap-8 md:grid-cols-3">
-            {relatedPosts.map((post) => (
+          <StaggerContainer className="grid gap-8 md:grid-cols-3">
+            {blogs.map((post: any) => (
               <StaggerItem key={post.id}>
                 <BlogCard {...post} />
               </StaggerItem>
             ))}
-          </StaggerContainer> */}
+          </StaggerContainer>
         </div>
       </section>
     </div>
