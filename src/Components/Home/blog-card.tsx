@@ -135,11 +135,11 @@ export default function BlogCard({
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <Avatar className="h-8 w-8">
-                                    <AvatarImage src={userRef.imageURL} alt={userRef.fullname} />
-                                    <AvatarFallback>{userRef.fullname[0]}</AvatarFallback>
+                                    <AvatarImage src={userRef?.imageURL} alt={userRef?.fullname} />
+                                    <AvatarFallback>{userRef?.fullname[0]}</AvatarFallback>
                                 </Avatar>
                                 <div className="flex flex-col">
-                                    <span className="text-sm font-medium">{userRef.fullname}</span>
+                                    <span className="text-sm font-medium">{userRef?.fullname}</span>
                                     <span className="text-xs text-muted-foreground">{createdAt?.slice(0, 10)}</span>
                                 </div>
                             </div>
@@ -158,7 +158,7 @@ export default function BlogCard({
                                     <MessageCircle className="h-4 w-4 text-muted-foreground" />
                                     <span className="sr-only">Comment</span>
                                 </Button>
-                                <span className="text-xs text-muted-foreground">{comments.length}</span>
+                                <span className="text-xs text-muted-foreground">{comments?.length}</span>
                                 <Button variant="ghost" size="icon" className="h-8 w-8">
                                     <Share2 className="h-4 w-4 text-muted-foreground" />
                                     <span className="sr-only">Share</span>

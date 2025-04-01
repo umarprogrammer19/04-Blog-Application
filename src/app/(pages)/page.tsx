@@ -27,7 +27,6 @@ export default async function Home() {
 
   const { blogs } = await posts.json();
   const featuredPosts = blogs;
-  console.log(featuredPosts);
 
   return (
     <div className="flex flex-col">
