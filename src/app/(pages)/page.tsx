@@ -90,11 +90,12 @@ export default async function Home() {
           </FadeIn>
 
           <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {featuredPosts.map((post: any) => (
-              <StaggerItem key={post.id}>
+            {featuredPosts.map((post: any, index: number) => {
+              return index <= 2 && <StaggerItem key={post.id}>
                 <BlogCard {...post} />
               </StaggerItem>
-            ))}
+            }
+            )}
           </StaggerContainer>
 
           <div className="mt-12 text-center">
