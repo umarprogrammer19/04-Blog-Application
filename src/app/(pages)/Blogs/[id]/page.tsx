@@ -251,7 +251,7 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
       <section className="p-10 bg-muted/30">
         <div className="container max-w-4xl mx-auto">
           <FadeIn>
-            <h2 className="text-2xl font-bold mb-6">Comments ({comments.length})</h2>
+            <h2 className="text-2xl font-bold mb-6">Comments ({post?.comments.length})</h2 >
 
             {/* Comment Form */}
             <div className="mb-8 p-6 bg-background rounded-xl shadow-sm">
@@ -263,20 +263,20 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
 
           {/* Comments List */}
           <StaggerContainer className="space-y-6">
-            {comments.map((comment) => (
-              <StaggerItem key={comment.id}>
+            {post?.comments?.map((comment: { content: string; _id: string; userId: { imageURL: string; fullname: string; }; createdAt: string }) => (
+              <StaggerItem key={comment._id}>
                 <div className="space-y-4">
                   <div className="p-6 bg-background rounded-xl shadow-sm">
                     <div className="flex items-start gap-4">
                       <Avatar>
-                        <AvatarImage src={comment.avatar} alt={comment.author} />
-                        <AvatarFallback>{comment.author.charAt(0)}</AvatarFallback>
+                        <AvatarImage src={comment.userId.imageURL} alt={comment.userId.imageURL} />
+                        <AvatarFallback>{comment.userId?.fullname?.charAt(0).toUpperCase()}</AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <div>
-                            <h4 className="font-semibold">{comment.author}</h4>
-                            <p className="text-xs text-muted-foreground">{comment.date}</p>
+                            <h4 className="font-semibold">{comment.userId.fullname.charAt(0).toUpperCase() + comment.userId.fullname.slice(1).toLowerCase()}</h4>
+                            <p className="text-xs text-muted-foreground">{comment.createdAt.slice(0, 10)}</p>
                           </div>
                         </div>
                         <p className="mt-2">{comment.content}</p>
