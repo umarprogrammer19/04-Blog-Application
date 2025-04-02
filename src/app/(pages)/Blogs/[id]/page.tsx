@@ -93,55 +93,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
 import { Badge } from "@/Components/ui/badge"
 import { Button } from "@/Components/ui/button"
 import { Textarea } from "@/Components/ui/textarea"
-import { Bookmark, Facebook, Heart, Linkedin, MessageCircle, Reply, Share2, ThumbsUp, Twitter } from "lucide-react"
+import { Bookmark, Facebook, Heart, Linkedin, MessageCircle, Share2, ThumbsUp, Twitter } from "lucide-react"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-
-// Mock data for the blog post
-const blogPosts = [
-  {
-    id: "1",
-    title: "The Future of Web Development: Trends to Watch in 2024",
-    content: `
-      <p>The web development landscape is constantly evolving, with new technologies, frameworks, and methodologies emerging at a rapid pace. As we move further into 2024, several key trends are shaping the future of how we build and interact with web applications.</p>
-      
-      <h2>1. AI-Powered Development Tools</h2>
-      <p>Artificial intelligence is revolutionizing the way developers work. From code completion to automated testing, AI tools are making development faster and more efficient. GitHub Copilot and similar AI assistants can now generate entire functions based on comments, while other tools can automatically identify and fix bugs.</p>
-      
-      <h2>2. WebAssembly Goes Mainstream</h2>
-      <p>WebAssembly (Wasm) continues to gain traction, allowing developers to run high-performance code in the browser. This technology enables complex applications like video editing, 3D rendering, and even machine learning models to run directly in the browser without plugins.</p>
-      
-      <blockquote>
-        <p>"WebAssembly is changing what's possible on the web. Applications that once required native code can now run at near-native speed in browsers."</p>
-        <cite>— Sarah Johnson, Web Performance Expert</cite>
-      </blockquote>
-      
-      <h2>3. The Rise of Edge Computing</h2>
-      <p>Edge computing is bringing computation closer to the data source, reducing latency and improving user experience. Platforms like Vercel, Netlify, and Cloudflare Workers are making it easier than ever to deploy code to the edge, enabling faster, more responsive applications.</p>
-      
-      <h2>4. Continued Evolution of JavaScript Frameworks</h2>
-      <p>React, Vue, and Angular continue to evolve, with each releasing major updates that improve performance and developer experience. Meanwhile, newer frameworks like Svelte and Solid are gaining popularity for their compile-time optimizations and reactivity models.</p>
-      
-      <h2>5. Improved Accessibility Standards</h2>
-      <p>Web accessibility is becoming a priority, not an afterthought. More developers are incorporating accessibility best practices from the start of projects, and tools for testing and improving accessibility are becoming more sophisticated.</p>
-      
-      <h2>Conclusion</h2>
-      <p>The future of web development is exciting, with technologies that enable faster, more powerful, and more accessible applications. Staying current with these trends will be essential for developers looking to build cutting-edge web experiences in 2024 and beyond.</p>
-    `,
-    category: "Technology",
-    date: "Mar 15, 2024",
-    readTime: "8 min read",
-    author: {
-      name: "Alex Morgan",
-      image: "/placeholder.svg?height=100&width=100",
-      role: "Senior Developer",
-      bio: "Alex is a web developer with over 10 years of experience. He specializes in frontend development and is passionate about creating accessible, performant web applications.",
-    },
-    image: "/placeholder.svg?height=600&width=1200&text=Web+Development",
-    likes: 124,
-    comments: 23,
-  },
-]
 
 // Mock data for related posts
 const relatedPosts = [
@@ -198,18 +152,7 @@ const comments = [
     date: "2 days ago",
     content:
       "This is a fantastic article! I've been following these trends and completely agree with your analysis on WebAssembly.",
-    likes: 12,
-    replies: [
-      {
-        id: 11,
-        author: "Bob Smith",
-        avatar: "/placeholder.svg?height=40&width=40",
-        date: "1 day ago",
-        content: "I agree! WebAssembly has been a game-changer for my projects as well.",
-        likes: 5,
-      },
-    ],
-  },
+    likes: 12,  },
   {
     id: 2,
     author: "Charlie Brown",
@@ -218,7 +161,6 @@ const comments = [
     content:
       "Great insights on edge computing. I'd love to see a follow-up article on how to optimize applications specifically for edge deployment.",
     likes: 8,
-    replies: [],
   },
   {
     id: 3,
@@ -228,7 +170,6 @@ const comments = [
     content:
       "The section on AI-powered development tools was eye-opening. I've started using GitHub Copilot recently and it's already saving me hours of work each week.",
     likes: 15,
-    replies: [],
   },
 ]
 
@@ -316,7 +257,7 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
                 </Button>
                 <Button variant="ghost" size="sm" className="gap-2">
                   <MessageCircle className="h-4 w-4" />
-                  <span>{post.comments} Comments</span>
+                  <span>{post.comments.length} Comments</span>
                 </Button>
               </div>
               <div className="flex items-center gap-2">
@@ -384,50 +325,9 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
                           </div>
                         </div>
                         <p className="mt-2">{comment.content}</p>
-                        <div className="flex items-center gap-4 mt-4">
-                          <Button variant="ghost" size="sm" className="gap-1">
-                            <ThumbsUp className="h-3 w-3" />
-                            <span className="text-xs">{comment.likes}</span>
-                          </Button>
-                          <Button variant="ghost" size="sm" className="gap-1">
-                            <Reply className="h-3 w-3" />
-                            <span className="text-xs">Reply</span>
-                          </Button>
-                        </div>
                       </div>
                     </div>
                   </div>
-
-                  {/* Replies */}
-                  {comment.replies.length > 0 && (
-                    <div className="ml-12 space-y-4">
-                      {comment.replies.map((reply) => (
-                        <div key={reply.id} className="p-6 bg-background/80 rounded-xl shadow-sm">
-                          <div className="flex items-start gap-4">
-                            <Avatar className="h-8 w-8">
-                              <AvatarImage src={reply.avatar} alt={reply.author} />
-                              <AvatarFallback>{reply.author.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1">
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <h4 className="font-semibold">{reply.author}</h4>
-                                  <p className="text-xs text-muted-foreground">{reply.date}</p>
-                                </div>
-                              </div>
-                              <p className="mt-2">{reply.content}</p>
-                              <div className="flex items-center gap-4 mt-4">
-                                <Button variant="ghost" size="sm" className="gap-1">
-                                  <ThumbsUp className="h-3 w-3" />
-                                  <span className="text-xs">{reply.likes}</span>
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
               </StaggerItem>
             ))}
