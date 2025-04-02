@@ -97,52 +97,6 @@ import { Bookmark, Facebook, Heart, Linkedin, MessageCircle, Share2, ThumbsUp, T
 import Image from "next/image"
 import { notFound } from "next/navigation"
 
-// Mock data for related posts
-const relatedPosts = [
-  {
-    id: "2",
-    title: "Getting Started with WebAssembly",
-    excerpt: "A beginner's guide to using WebAssembly in your web projects.",
-    category: "Technology",
-    date: "Mar 10, 2024",
-    author: {
-      name: "Jamie Chen",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    image: "/placeholder.svg?height=400&width=600&text=WebAssembly",
-    likes: 87,
-    comments: 12,
-  },
-  {
-    id: "3",
-    title: "Edge Computing: The Complete Guide",
-    excerpt: "Everything you need to know about deploying applications to the edge.",
-    category: "Technology",
-    date: "Mar 8, 2024",
-    author: {
-      name: "Sam Wilson",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    image: "/placeholder.svg?height=400&width=600&text=Edge+Computing",
-    likes: 76,
-    comments: 9,
-  },
-  {
-    id: "4",
-    title: "The State of JavaScript Frameworks in 2024",
-    excerpt: "Comparing the most popular JavaScript frameworks and their latest features.",
-    category: "Technology",
-    date: "Mar 5, 2024",
-    author: {
-      name: "Taylor Swift",
-      image: "/placeholder.svg?height=40&width=40",
-    },
-    image: "/placeholder.svg?height=400&width=600&text=JS+Frameworks",
-    likes: 112,
-    comments: 18,
-  },
-]
-
 // Mock data for comments
 const comments = [
   {
@@ -152,7 +106,8 @@ const comments = [
     date: "2 days ago",
     content:
       "This is a fantastic article! I've been following these trends and completely agree with your analysis on WebAssembly.",
-    likes: 12,  },
+    likes: 12,
+  },
   {
     id: 2,
     author: "Charlie Brown",
