@@ -47,7 +47,7 @@ function UserBlogs() {
         };
 
         fetchUserBlogs();
-    }, [userBlogs]);
+    }, []);
 
     return (
         <div className="w-[80%] mx-auto space-y-8">
