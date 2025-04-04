@@ -300,8 +300,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold">Email</h3>
-                      <p className="text-muted-foreground">contact@insight.com</p>
-                      <p className="text-muted-foreground">support@insight.com</p>
+                      <p className="text-muted-foreground">umarofficial0121@gmail.com</p>
+                      <p className="text-muted-foreground">uhhfj0345@gmail.com</p>
                     </div>
                   </div>
 
@@ -311,8 +311,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold">Phone</h3>
-                      <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                      <p className="text-muted-foreground">Mon-Fri, 9am-5pm EST</p>
+                      <p className="text-muted-foreground">+92 307 5799968</p>
+                      <p className="text-muted-foreground">Opens 24 Hours</p>
                     </div>
                   </div>
                 </div>
@@ -343,17 +343,6 @@ export default function ContactPage() {
                 </div>
               </div>
             </SlideUp>
-          </div>
-        </div>
-      </section>
-
-      {/* Map Section */}
-      <section className="p-10">
-        <div className="container">
-          <div className="rounded-lg overflow-hidden h-[400px] bg-muted">
-            <div className="w-full h-full bg-muted flex items-center justify-center">
-              <p className="text-muted-foreground">Interactive map would be displayed here</p>
-            </div>
           </div>
         </div>
       </section>
