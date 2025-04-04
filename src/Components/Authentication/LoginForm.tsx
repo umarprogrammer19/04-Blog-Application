@@ -1,142 +1,37 @@
-// "use client";
-// import { Button } from "@/Components/ui/Button";
-// import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/Components/ui/card";
-// import { Input } from "@/Components/ui/input";
-// import { setCookie } from "cookies-next";
-// import Link from "next/link";
-// import { useRouter } from "next/navigation";
-// import { useRef, useState } from "react";
-// import { toast } from "sonner";
-
-// function LoginForm() {
-//   const [isLoading, setIsLoading] = useState(false);
-//   const getEmail = useRef<HTMLInputElement>(null);
-//   const getPassword = useRef<HTMLInputElement>(null);
-
-//   const router = useRouter();
-
-//   const validateInputs = () => {
-//     const email = getEmail.current?.value.trim();
-//     const password = getPassword.current?.value.trim();
-
-//     if (!email) return "Email is required";
-//     if (!/\S+@\S+\.\S+/.test(email)) return "Invalid email format";
-//     if (!password) return "Password is required";
-//     return null;
-//   };
-
-//   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-//     event.preventDefault();
-
-//     const validationError = validateInputs();
-//     if (validationError) return toast.error(validationError);
-
-//     const loadingToast = toast("Logging in...", {
-//       description: "Please wait...",
-//       duration: Infinity,
-//     });
-//     setIsLoading(true);
-
-//     try {
-//       const response = await fetch("http://localhost:8000/user/signin", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         credentials: "include",
-//         body: JSON.stringify({
-//           email: getEmail.current?.value.trim(),
-//           password: getPassword.current?.value.trim(),
-//         }),
-//       });
-
-
-//       if (response.ok) {
-//         const { accessToken, user } = await response.json();
-
-//         setCookie('accessToken', accessToken, {
-//           path: '/',
-//           secure: true,
-//           sameSite: 'strict',
-//         });
-//         localStorage.setItem('accessToken', accessToken);
-//         localStorage.setItem('current_user_id', user._id);
-
-//         toast.success("Login successful!");
-//         router.push("/");
-//       } else {
-//         const { message } = await response.json();
-//         toast.error(message);
-//       }
-//     } catch (error) {
-//       console.error("Login error:", error);
-//       toast.error("An error occurred during login");
-//     } finally {
-//       setIsLoading(false);
-//       toast.dismiss(loadingToast);
-//     }
-//   };
-
-//   return (
-//     <Card className="w-full max-w-md">
-//       <CardHeader>
-//         <CardTitle className="text-center text-3xl font-bold text-violet-700">
-//           Login
-//         </CardTitle>
-//       </CardHeader>
-//       <CardContent>
-//         <form onSubmit={handleLogin} className="space-y-6">
-//           <Input
-//             type="email"
-//             placeholder="Email"
-//             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-600"
-//             ref={getEmail}
-//           />
-//           <Input
-//             type="password"
-//             placeholder="Password"
-//             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-600"
-//             ref={getPassword}
-//           />
-//           <Button
-//             type="submit"
-//             className={`w-full bg-violet-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-transparent hover:text-purple-700 border border-purple-700 transition ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-//             disabled={isLoading}
-//           >
-//             {isLoading ? "Logging In..." : "Login"}
-//           </Button>
-//         </form>
-//       </CardContent>
-//       <CardFooter>
-//         <p className="text-center text-gray-600 w-full">
-//           Don't have an account?{" "}
-//           <Link href="/Register" className="text-violet-600 hover:underline">
-//             Register
-//           </Link>
-//         </p>
-//       </CardFooter>
-//     </Card>
-//   )
-// }
-
-// export default LoginForm
-
 "use client";
 
-import type React from "react";
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { setCookie } from "cookies-next";
-import { toast } from "sonner";
+import { FadeIn } from "@/Components/Home/animation";
 import { Button } from "@/Components/ui/Button";
+import { Checkbox } from "@/Components/ui/checkbox";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-import { Checkbox } from "@/Components/ui/checkbox";
 import { Separator } from "@/Components/ui/separator";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { setCookie } from "cookies-next";
 import { Github, Mail } from "lucide-react";
-import { FadeIn } from "@/Components/Home/animation";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type React from "react";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
+import * as THREE from "three";
+
+function RotatingCube() {
+  const meshRef = useRef<THREE.Mesh>(null!);
+  useFrame((state, delta) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.x += delta;
+      meshRef.current.rotation.y += delta;
+    }
+  });
+
+  return (
+    <mesh ref={meshRef} position={[0, 0, 0]}>
+      <boxGeometry args={[2, 2, 2]} />
+      <meshStandardMaterial color="#7e22ce" />
+    </mesh>
+  );
+}
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -319,15 +214,14 @@ export default function LoginPage() {
         </FadeIn>
       </div>
 
-      {/* Right Side - Image */}
+      {/* Right Side - 3D Canvas */}
       <div className="hidden lg:block lg:w-1/2 relative">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-600/20" />
-        <Image
-          src="/placeholder.svg?height=1080&width=1920&text=Welcome+Back"
-          alt="Login"
-          fill
-          className="object-cover"
-        />
+        <Canvas className="w-full h-full">
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[0, 0, 5]} />
+          <RotatingCube />
+        </Canvas>
       </div>
     </div>
   );
