@@ -6,32 +6,13 @@ import { Checkbox } from "@/Components/ui/checkbox";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Separator } from "@/Components/ui/separator";
-import { Canvas, useFrame } from "@react-three/fiber";
 import { setCookie } from "cookies-next";
 import { Github, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type React from "react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import * as THREE from "three";
-
-function RotatingCube() {
-  const meshRef = useRef<THREE.Mesh>(null!);
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x += delta;
-      meshRef.current.rotation.y += delta;
-    }
-  });
-
-  return (
-    <mesh ref={meshRef} position={[0, 0, 0]}>
-      <boxGeometry args={[2, 2, 2]} />
-      <meshStandardMaterial color="#7e22ce" />
-    </mesh>
-  );
-}
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -212,16 +193,6 @@ export default function LoginPage() {
             </div>
           </div>
         </FadeIn>
-      </div>
-
-      {/* Right Side - 3D Canvas */}
-      <div className="hidden lg:block lg:w-1/2 relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-600/20" />
-        <Canvas className="w-full h-full">
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[0, 0, 5]} />
-          <RotatingCube />
-        </Canvas>
       </div>
     </div>
   );
