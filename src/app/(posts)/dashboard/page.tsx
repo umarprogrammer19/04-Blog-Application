@@ -159,7 +159,7 @@ export default function DashboardPage() {
     }
 
     return (
-        <div className="container p-10 mx-auto">
+        <div className="container w-full p-10 mx-auto">
             <FadeIn>
                 <div className="flex flex-col gap-2 mb-8">
                     <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
