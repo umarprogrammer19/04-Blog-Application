@@ -14,6 +14,7 @@ export async function middleware(req: NextRequest) {
     }
 }
 
+// For Setting The Routes 
 export const config = {
     matcher: ['/', '/dashboard', '/about', '/blogs', '/contact'],
 };
