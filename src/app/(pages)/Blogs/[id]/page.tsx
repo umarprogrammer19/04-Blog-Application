@@ -2,10 +2,9 @@ import { FadeIn, StaggerContainer, StaggerItem } from "@/Components/Home/animati
 import BlogCard from "@/Components/Home/blog-card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
 import { Badge } from "@/Components/ui/badge"
-import { Button } from "@/Components/ui/button"
+import { Button } from "@/Components/ui/Button"
 import CommentSection from "@/Components/ui/CommentSection"
-import { Textarea } from "@/Components/ui/textarea"
-import { Bookmark, Facebook, Heart, Linkedin, MessageCircle, Share2, ThumbsUp, Twitter } from "lucide-react"
+import { Bookmark, Facebook, Heart, Linkedin, MessageCircle, Share2, Twitter } from "lucide-react"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 
@@ -19,11 +18,14 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
   }
 
   const { blogs } = await posts.json();
-  const post = blogs.find((post: any) => post._id === params.id)
+  const post = blogs.find((post: any) => post._id === params.id);
 
   if (!post) {
-    notFound()
+    notFound();
   }
+
+  // Filter out the current post from related posts
+  const relatedPosts = blogs.filter((blog: any) => blog._id !== params.id);
 
   return (
     <div className="flex flex-col">
@@ -60,7 +62,7 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
                 </Avatar>
                 <div>
                   <div className="font-medium">{post.userRef.fullname}</div>
-                  <div className="text-sm text-muted-foreground">{"Admin"}</div>
+                  <div className="text-sm text-muted-foreground">Admin</div>
                 </div>
               </div>
               <div className="flex gap-2">
@@ -83,48 +85,36 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
             />
           </FadeIn>
 
-          {/* Article Actions */}
-          <FadeIn>
-            <div className="flex justify-between items-center py-6 border-t border-b">
-              <div className="flex items-center gap-4">
-                <Button variant="ghost" size="sm" className="gap-2">
-                  <Heart className="h-4 w-4" />
-                  <span>{post.likesCount} Likes</span>
-                </Button>
-                <Button variant="ghost" size="sm" className="gap-2">
-                  <MessageCircle className="h-4 w-4" />
-                  <span>{post.comments.length} Comments</span>
-                </Button>
+          {/* Subsections */}
+          {post.subsections && post.subsections.length > 0 && (
+            <FadeIn>
+              <div className="mb-12">
+                {post.subsections.map((subsection: any, index: number) => (
+                  <div key={index} className="mb-8">
+                    <h2 className="text-2xl font-semibold mb-4">{subsection.subtitle}</h2>
+                    <div
+                      className="prose prose-lg dark:prose-invert max-w-none"
+                      dangerouslySetInnerHTML={{ __html: subsection.subdescription }}
+                    />
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm">
-                  <Share2 className="mr-2 h-4 w-4" />
-                  Share
-                </Button>
-              </div>
-            </div>
-          </FadeIn>
+            </FadeIn>
+          )}
 
-          {/* Share Section */}
-          <FadeIn>
-            <div className="mt-8">
-              <h3 className="text-lg font-semibold mb-4">Share this article</h3>
-              <div className="flex gap-2">
-                <Button variant="outline" size="icon">
-                  <Facebook className="h-4 w-4" />
-                  <span className="sr-only">Share on Facebook</span>
-                </Button>
-                <Button variant="outline" size="icon">
-                  <Twitter className="h-4 w-4" />
-                  <span className="sr-only">Share on Twitter</span>
-                </Button>
-                <Button variant="outline" size="icon">
-                  <Linkedin className="h-4 w-4" />
-                  <span className="sr-only">Share on LinkedIn</span>
-                </Button>
+          {/* Conclusion */}
+          {post.conclusion && (
+            <FadeIn>
+              <div className="mb-12">
+                <h2 className="text-2xl font-semibold mb-4">Conclusion</h2>
+                <div
+                  className="prose prose-lg dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{ __html: post.conclusion }}
+                />
               </div>
-            </div>
-          </FadeIn>
+            </FadeIn>
+          )}
+
         </div>
       </article>
 
@@ -132,27 +122,27 @@ export default async function BlogPostPage({ params }: { params: { id: string } 
       <CommentSection comments={post?.comments} blogId={post._id} />
 
       {/* Related Posts */}
-      <section className="p-16">
-        <div className="container">
-          <FadeIn>
-            <div className="flex flex-col items-center text-center mb-12">
-              <Badge className="mb-4">Related Articles</Badge>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">You Might Also Like</h2>
-              <p className="max-w-2xl text-muted-foreground text-lg">Explore more articles related to this topic.</p>
-            </div>
-          </FadeIn>
+      {relatedPosts.length > 0 && (
+        <section className="p-16">
+          <div className="container">
+            <FadeIn>
+              <div className="flex flex-col items-center text-center mb-12">
+                <Badge className="mb-4">Related Articles</Badge>
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">You Might Also Like</h2>
+                <p className="max-w-2xl text-muted-foreground text-lg">Explore more articles related to this topic.</p>
+              </div>
+            </FadeIn>
 
-          <StaggerContainer className="grid gap-8 md:grid-cols-3">
-            {blogs.map((post: any) => (
-              <StaggerItem key={post.id}>
-                <BlogCard {...post} />
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
+            <StaggerContainer className="grid gap-8 md:grid-cols-3">
+              {relatedPosts.slice(0, 3).map((post: any) => (
+                <StaggerItem key={post._id}>
+                  <BlogCard {...post} />
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </div>
+        </section>
+      )}
     </div>
-  )
+  );
 }
-
-
