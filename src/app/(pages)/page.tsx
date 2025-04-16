@@ -1,7 +1,7 @@
 import { FadeIn, ScaleIn, SlideUp, StaggerContainer, StaggerItem } from "@/Components/Home/animation";
 import BlogCard from "@/Components/Home/blog-card";
 import { Badge } from "@/Components/ui/badge";
-import { Button } from "@/Components/ui/button";
+import { Button } from "@/Components/ui/Button";
 import { Input } from "@/Components/ui/input";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
