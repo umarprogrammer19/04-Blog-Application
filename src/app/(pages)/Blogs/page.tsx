@@ -1,44 +1,6 @@
-// import ShowBlogs from "@/Components/ui/ShowBlogs";
-
-// const Blogs = () => {
-
-//   return (
-//     <div className="bg-gray-50">
-//       {/* Header Section */}
-//       <section className="py-12 text-center">
-//         <div className="max-w-3xl mx-auto px-4">
-//           <p className="text-sm text-gray-500 uppercase tracking-wide mb-2">
-//             OUR BLOGS
-//           </p>
-//           <h2 className="text-3xl font-bold text-gray-800 mb-4">
-//             Find all our blogs here
-//           </h2>
-//           <p className="text-gray-600 text-base leading-relaxed">
-//             Our blogs are carefully researched and well-written to provide you
-//             with the best content. Explore the articles curated just for you.
-//           </p>
-//         </div>
-//       </section>
-
-//       {/* Cards Section */}
-
-//       {/* Cards Section */}
-//       <section className="py-12 bg-gray-50">
-//         <div className="container mx-auto px-4 max-w-7xl">
-//             <ShowBlogs />
-//         </div>
-//       </section>
-//     </div>
-//   );
-// };
-
-// export default Blogs;
-
-
-
 import Link from "next/link"
 import Image from "next/image"
-import { Button } from "@/Components/ui/button"
+import { Button } from "@/Components/ui/Button"
 import { Badge } from "@/Components/ui/badge"
 import { Input } from "@/Components/ui/input"
 import { Search, Filter, ArrowRight } from "lucide-react"
@@ -54,109 +16,6 @@ import {
 } from "@/Components/ui/pagination"
 import BlogCard from "@/Components/Home/blog-card"
 import { FadeIn, StaggerContainer, StaggerItem } from "@/Components/Home/animation"
-
-// const featuredPost = {
-//   id: "1",
-//   title: "The Future of Web Development: Trends to Watch in 2024",
-//   excerpt:
-//     "Explore the cutting-edge technologies and methodologies that are shaping the future of web development. From AI-powered tools to new frameworks and paradigms, discover what's next in the world of web development.",
-//   category: "Technology",
-//   date: "Mar 15, 2024",
-//   author: {
-//     name: "Alex Morgan",
-//     image: "/placeholder.svg?height=40&width=40",
-//   },
-//   image: "/placeholder.svg?height=600&width=1200&text=Featured+Blog",
-//   likes: 124,
-//   comments: 23,
-// }
-
-// const blogPosts = [
-//   {
-//     id: "2",
-//     title: "Designing for Accessibility: A Comprehensive Guide",
-//     excerpt: "Learn how to create inclusive digital experiences that work for everyone, regardless of ability.",
-//     category: "Design",
-//     date: "Mar 12, 2024",
-//     author: {
-//       name: "Jamie Chen",
-//       image: "/placeholder.svg?height=40&width=40",
-//     },
-//     image: "/placeholder.svg?height=400&width=600&text=Accessibility",
-//     likes: 98,
-//     comments: 15,
-//   },
-//   {
-//     id: "3",
-//     title: "The Psychology of Productivity: Maximizing Your Workflow",
-//     excerpt: "Discover science-backed strategies to enhance your productivity and achieve more in less time.",
-//     category: "Productivity",
-//     date: "Mar 10, 2024",
-//     author: {
-//       name: "Sam Wilson",
-//       image: "/placeholder.svg?height=40&width=40",
-//     },
-//     image: "/placeholder.svg?height=400&width=600&text=Productivity",
-//     likes: 87,
-//     comments: 12,
-//   },
-//   {
-//     id: "4",
-//     title: "Mastering CSS Grid: Advanced Layout Techniques",
-//     excerpt: "Take your CSS Grid skills to the next level with these advanced techniques and practical examples.",
-//     category: "Development",
-//     date: "Mar 8, 2024",
-//     author: {
-//       name: "Taylor Swift",
-//       image: "/placeholder.svg?height=40&width=40",
-//     },
-//     image: "/placeholder.svg?height=400&width=600&text=CSS+Grid",
-//     likes: 76,
-//     comments: 9,
-//   },
-//   {
-//     id: "5",
-//     title: "The Rise of AI in Content Creation",
-//     excerpt: "How artificial intelligence is transforming the way we create and consume content online.",
-//     category: "AI",
-//     date: "Mar 5, 2024",
-//     author: {
-//       name: "Jordan Lee",
-//       image: "/placeholder.svg?height=40&width=40",
-//     },
-//     image: "/placeholder.svg?height=400&width=600&text=AI+Content",
-//     likes: 112,
-//     comments: 18,
-//   },
-//   {
-//     id: "6",
-//     title: "Building a Personal Brand as a Developer",
-//     excerpt: "Strategies for establishing your professional identity and standing out in a competitive industry.",
-//     category: "Career",
-//     date: "Mar 3, 2024",
-//     author: {
-//       name: "Casey Kim",
-//       image: "/placeholder.svg?height=40&width=40",
-//     },
-//     image: "/placeholder.svg?height=400&width=600&text=Personal+Brand",
-//     likes: 94,
-//     comments: 14,
-//   },
-//   {
-//     id: "7",
-//     title: "Understanding Web Performance Metrics",
-//     excerpt: "A deep dive into the key metrics that affect your website's performance and user experience.",
-//     category: "Performance",
-//     date: "Mar 1, 2024",
-//     author: {
-//       name: "Riley Johnson",
-//       image: "/placeholder.svg?height=40&width=40",
-//     },
-//     image: "/placeholder.svg?height=400&width=600&text=Web+Performance",
-//     likes: 68,
-//     comments: 7,
-//   },
-// ]
 
 export default async function BlogsPage() {
 
@@ -227,32 +86,6 @@ export default async function BlogsPage() {
         </div>
       </section>
 
-      {/* Featured Post */}
-      {/* <section className="p-16">
-        <div className="container">
-          <FadeIn>
-            <div className="flex flex-col items-center text-center mb-8">
-              <Badge className="mb-4">Featured Article</Badge>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Editor's Pick</h2>
-            </div>
-          </FadeIn>
-
-          <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {featuredPost.map((post: any, index: number) => {
-              return index <= 2 && <StaggerItem key={post.id}>
-                <BlogCard {...post} />
-              </StaggerItem>
-            }
-            )}
-          </StaggerContainer>
-
-          <FadeIn>
-            <BlogCard {...featuredPost} variant="horizontal" className="md:h-80" />
-          </FadeIn>
-        </div>
-      </section> */}
-
-      {/* All Blog Posts */}
       <section className="p-16 bg-muted/30">
         <div className="container">
           <FadeIn>
@@ -267,7 +100,7 @@ export default async function BlogsPage() {
 
           <StaggerContainer className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {featuredPost.map((post: any, index: number) => {
-              return index <= 2 && <StaggerItem key={post.id}>
+              return index <= 2 && <StaggerItem key={post._id}>
                 <BlogCard {...post} />
               </StaggerItem>
             }

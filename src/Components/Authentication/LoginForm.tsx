@@ -5,9 +5,7 @@ import { Button } from "@/Components/ui/Button";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-import { Separator } from "@/Components/ui/separator";
 import { setCookie } from "cookies-next";
-import { Github, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type React from "react";
@@ -94,11 +92,6 @@ export default function LoginPage() {
       <div className="flex flex-col justify-center w-full max-w-md p-8 mx-auto lg:w-1/2">
         <FadeIn>
           <div className="flex flex-col space-y-2 text-center mb-8">
-            <Link href="/" className="mx-auto">
-              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                Insight
-              </span>
-            </Link>
             <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
             <p className="text-sm text-muted-foreground">
               Enter your email to sign in to your account
@@ -162,26 +155,6 @@ export default function LoginPage() {
                 </Button>
               </div>
             </form>
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <Separator className="w-full" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" disabled={isLoading}>
-                <Github className="mr-2 h-4 w-4" />
-                Github
-              </Button>
-              <Button variant="outline" disabled={isLoading}>
-                <Mail className="mr-2 h-4 w-4" />
-                Google
-              </Button>
-            </div>
             <div className="text-center text-sm">
               Don't have an account?{" "}
               <Link
