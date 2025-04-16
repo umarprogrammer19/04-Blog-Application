@@ -1,72 +1,145 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { Button } from "@/Components/ui/Button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/Components/ui/card"
-import { Input } from "@/Components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
-import { Badge } from "@/Components/ui/badge"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/Components/ui/dropdown-menu"
-import { Checkbox } from "@/Components/ui/checkbox"
-import { Eye, Edit, Trash2, MoreVertical, Search, Filter, PenSquare } from "lucide-react"
+import { Badge } from "@/Components/ui/badge";
+import { Button } from "@/Components/ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/Components/ui/dropdown-menu";
+import { Input } from "@/Components/ui/input";
+import { Tabs, TabsContent } from "@/Components/ui/tabs";
+import { Edit, Eye, MoreVertical, PenSquare, Search, Trash2 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import EditBlogDrawer from "./EditBlogDrawer";
+
+interface Post {
+    _id: string;
+    title: string;
+    description: string;
+    quotes: string;
+    conclusion: string;
+    category: string;
+    subsections: { subtitle: string; subdescription: string }[];
+    excerpt: string;
+    status: string;
+    date: string;
+    views: number;
+    comments: number;
+    imageURL: string;
+    like: any[];
+};
 
 export default function PostsPage() {
-    const [selectedPosts, setSelectedPosts] = useState<string[]>([])
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [selectedPosts, setSelectedPosts] = useState<string[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filterStatus, setFilterStatus] = useState("all");
+    const [isLoading, setIsLoading] = useState(false);
+    const [editPost, setEditPost] = useState<Post | null>(null); // post to be edited
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+    // Fetch posts from the backend API
+    const fetchPosts = async () => {
+        setIsLoading(true);
+        try {
+            const res = await fetch("http://localhost:8000/api/v1/userBlog", {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
+            if (!res.ok) {
+                throw new Error("Error fetching posts");
+            }
+            const data = await res.json();
+            setPosts(data.userBlogs);
+        } catch (error: any) {
+            console.error("Failed to fetch posts", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchPosts();
+    }, []);
+
+    // Toggle selection for a single post
     const togglePostSelection = (postId: string) => {
         if (selectedPosts.includes(postId)) {
-            setSelectedPosts(selectedPosts.filter((id) => id !== postId))
+            setSelectedPosts(selectedPosts.filter((id) => id !== postId));
         } else {
-            setSelectedPosts([...selectedPosts, postId])
+            setSelectedPosts([...selectedPosts, postId]);
         }
-    }
-
-    const toggleSelectAll = () => {
-        if (selectedPosts.length === posts.length) {
-            setSelectedPosts([])
-        } else {
-            setSelectedPosts(posts.map((post) => post.id))
+    };
+    // Delete a single post
+    const deletePost = async (postId: string) => {
+        if (!confirm("Are you sure you want to delete this post?")) return;
+        try {
+            const res = await fetch(`http://localhost:8000/api/v1/delete/${postId}`, {
+                method: "DELETE",
+                credentials: "include",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                },
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message);
+            // Refresh posts after deletion
+            fetchPosts();
+        } catch (error: any) {
+            console.error("Failed to delete post", error);
+            alert("Failed to delete post: " + error.message);
         }
-    }
+    };
 
-    const posts = [
-        {
-            id: "1",
-            title: "The Future of Web Development",
-            excerpt: "Exploring the latest trends and technologies shaping the future of web development.",
-            status: "published",
-            date: "Mar 15, 2024",
-            category: "Technology",
-            views: 423,
-            comments: 12,
-            image: "/placeholder.svg?height=100&width=200&text=Web+Dev",
-        },
-        {
-            id: "2",
-            title: "10 Tips for Better Writing",
-            excerpt: "Improve your writing skills with these practical tips and techniques.",
-            status: "published",
-            date: "Mar 10, 2024",
-            category: "Writing",
-            views: 287,
-            comments: 8,
-            image: "/placeholder.svg?height=100&width=200&text=Writing",
-        },
-        {
-            id: "3",
-            title: "Building Responsive Layouts",
-            excerpt: "Learn how to create responsive layouts that work on any device.",
-            status: "published",
-            date: "Mar 1, 2024",
-            category: "Design",
-            views: 156,
-            comments: 5,
-            image: "/placeholder.svg?height=100&width=200&text=Layouts",
-        },
-    ]
+    // Delete multiple selected posts
+    const deleteSelectedPosts = async () => {
+        if (!confirm("Are you sure you want to delete all selected posts?")) return;
+        try {
+            await Promise.all(
+                selectedPosts.map((postId) =>
+                    fetch(`http://localhost:8000/api/v1/delete/${postId}`, {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                        },
+                        credentials: "include",
+                    })
+                )
+            );
+            setSelectedPosts([]);
+            fetchPosts();
+        } catch (error: any) {
+            console.error("Failed to delete selected posts", error);
+            alert("Error deleting selected posts: " + error.message);
+        }
+    };
+
+    // Filtering logic by status and search term
+    const filteredPosts = posts.filter((post) => {
+        const matchesStatus = filterStatus === "all" || post.status === filterStatus;
+        const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesStatus && matchesSearch;
+    });
+
+    // Open the edit drawer and set the blog to edit.
+    const openEditDrawer = (post: Post) => {
+        setEditPost(post);
+        setIsDrawerOpen(true);
+    };
+
+    // Close the edit drawer and refresh posts if needed.
+    const closeEditDrawer = () => {
+        setIsDrawerOpen(false);
+        setEditPost(null);
+        // Optionally refresh your posts list after an edit:
+        fetchPosts();
+    };
 
     return (
         <div className="flex flex-col gap-6">
@@ -80,23 +153,16 @@ export default function PostsPage() {
                     <div className="flex flex-1 items-center gap-2">
                         <div className="relative flex-1">
                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <Input type="search" placeholder="Search posts..." className="pl-8" />
+                            <Input
+                                type="search"
+                                placeholder="Search posts..."
+                                className="pl-8"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
                         </div>
-                        <Button variant="outline" size="icon">
-                            <Filter className="h-4 w-4" />
-                            <span className="sr-only">Filter</span>
-                        </Button>
                     </div>
                     <div className="flex gap-2">
-                        <Select defaultValue="all">
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Filter by status" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">All Posts</SelectItem>
-                                <SelectItem value="published">Published</SelectItem>
-                            </SelectContent>
-                        </Select>
                         <Link href="/dashboard/create">
                             <Button>
                                 <PenSquare className="mr-2 h-4 w-4" />
@@ -111,16 +177,11 @@ export default function PostsPage() {
                         <Card>
                             <CardHeader className="p-4">
                                 <div className="flex items-center gap-4">
-                                    <Checkbox
-                                        id="select-all"
-                                        checked={selectedPosts.length === posts.length}
-                                        onCheckedChange={toggleSelectAll}
-                                    />
-                                    <CardTitle className="text-base">All Posts ({posts.length})</CardTitle>
+                                    <CardTitle className="text-base">All Posts ({filteredPosts.length})</CardTitle>
                                     {selectedPosts.length > 0 && (
                                         <div className="ml-auto flex items-center gap-2">
                                             <span className="text-sm text-muted-foreground">{selectedPosts.length} selected</span>
-                                            <Button variant="outline" size="sm">
+                                            <Button variant="outline" size="sm" onClick={deleteSelectedPosts}>
                                                 <Trash2 className="mr-2 h-4 w-4" />
                                                 Delete
                                             </Button>
@@ -129,119 +190,85 @@ export default function PostsPage() {
                                 </div>
                             </CardHeader>
                             <CardContent className="p-0">
-                                <div className="divide-y">
-                                    {posts.map((post) => (
-                                        <div key={post.id} className="flex items-center gap-4 p-4">
-                                            <Checkbox
-                                                id={`post-${post.id}`}
-                                                checked={selectedPosts.includes(post.id)}
-                                                onCheckedChange={() => togglePostSelection(post.id)}
-                                            />
-                                            <div className="hidden sm:block">
-                                                <Image
-                                                    src={post.image || "/placeholder.svg"}
-                                                    alt={post.title}
-                                                    width={100}
-                                                    height={60}
-                                                    className="rounded-md object-cover"
-                                                />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
+                                {isLoading ? (
+                                    <p className="p-4 text-center">Loading posts...</p>
+                                ) : filteredPosts.length === 0 ? (
+                                    <p className="p-4 text-center">No posts found.</p>
+                                ) : (
+                                    <div className="divide-y">
+                                        {filteredPosts.map((post) => (
+                                            <div key={post._id} className="flex items-center gap-4 p-4">
+                                                <div className="hidden sm:block">
+                                                    <Image
+                                                        src={post.imageURL || "/placeholder.svg"}
+                                                        alt={post.title}
+                                                        width={100}
+                                                        height={60}
+                                                        className="rounded-md object-cover"
+                                                    />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center gap-2">
+                                                        <h3 className="font-medium truncate">{post.title}</h3>
+                                                        <Badge variant={post.status === "published" ? "default" : "secondary"}>
+                                                            {post.status}
+                                                        </Badge>
+                                                    </div>
+                                                    <p className="text-sm text-muted-foreground truncate">{post.excerpt}</p>
+                                                    <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
+                                                        <span>{post.date}</span>
+                                                        <span>{post.category}</span>
+                                                        {post.status === "published" && <span>{post.comments} comments</span>}
+                                                    </div>
+                                                </div>
                                                 <div className="flex items-center gap-2">
-                                                    <h3 className="font-medium truncate">{post.title}</h3>
-                                                    <Badge variant={post.status === "published" ? "default" : "secondary"}>{post.status}</Badge>
-                                                </div>
-                                                <p className="text-sm text-muted-foreground truncate">{post.excerpt}</p>
-                                                <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
-                                                    <span>{post.date}</span>
-                                                    <span>{post.category}</span>
                                                     {post.status === "published" && (
-                                                        <>
-                                                            <span>{post.comments} comments</span>
-                                                        </>
+                                                        <Button variant="ghost" size="icon" asChild>
+                                                            <Link href={`/blogs/${post._id}`}>
+                                                                <Eye className="h-4 w-4" />
+                                                                <span className="sr-only">View</span>
+                                                            </Link>
+                                                        </Button>
                                                     )}
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                {post.status === "published" && (
-                                                    <Button variant="ghost" size="icon" asChild>
-                                                        <Link href={`/blogs/${post.id}`}>
-                                                            <Eye className="h-4 w-4" />
-                                                            <span className="sr-only">View</span>
-                                                        </Link>
-                                                    </Button>
-                                                )}
-                                                <Button variant="ghost" size="icon" asChild>
-                                                    <Link href={`/dashboard/posts/${post.id}/edit`}>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={() => openEditDrawer(post)}
+                                                    >
                                                         <Edit className="h-4 w-4" />
                                                         <span className="sr-only">Edit</span>
-                                                    </Link>
-                                                </Button>
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="icon">
-                                                            <MoreVertical className="h-4 w-4" />
-                                                            <span className="sr-only">More</span>
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
-                                                        <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                                                        <DropdownMenuItem>Archive</DropdownMenuItem>
-                                                        <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
+                                                    </Button>
+                                                    <Button variant="ghost" size="icon" onClick={() => deletePost(post._id)}>
+                                                        <Trash2 className="h-4 w-4" />
+                                                        <span className="sr-only">Delete</span>
+                                                    </Button>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" size="icon">
+                                                                <MoreVertical className="h-4 w-4" />
+                                                                <span className="sr-only">More</span>
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuItem>Duplicate</DropdownMenuItem>
+                                                            <DropdownMenuItem>Archive</DropdownMenuItem>
+                                                            <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-
-                    <TabsContent value="published" className="mt-4">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Published Posts</CardTitle>
-                                <CardDescription>Posts that are live and visible to your audience.</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="text-sm text-muted-foreground">
-                                    {posts.filter((post) => post.status === "published").length} published posts
-                                </p>
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-
-                    <TabsContent value="drafts" className="mt-4">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Draft Posts</CardTitle>
-                                <CardDescription>Posts that are still being worked on.</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="text-sm text-muted-foreground">
-                                    {posts.filter((post) => post.status === "draft").length} draft posts
-                                </p>
-                            </CardContent>
-                        </Card>
-                    </TabsContent>
-
-                    <TabsContent value="archived" className="mt-4">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Archived Posts</CardTitle>
-                                <CardDescription>Posts that have been archived and are no longer visible.</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="text-sm text-muted-foreground">
-                                    {posts.filter((post) => post.status === "archived").length} archived posts
-                                </p>
+                                        ))}
+                                    </div>
+                                )}
                             </CardContent>
                         </Card>
                     </TabsContent>
                 </Tabs>
             </div>
-        </div>
-    )
-}
 
+            {isDrawerOpen && editPost && (
+                <EditBlogDrawer post={editPost} onClose={closeEditDrawer} />
+            )}
+        </div>
+    );
+}
