@@ -14,7 +14,7 @@ export async function middleware(req: NextRequest) {
     }
 }
 
-// On These Routes The Middleware Works
+// Routes in which The Middleware Works
 export const config = {
     matcher: ['/dashboard', '/dashboard/posts', '/dashboard/create'],
 };
