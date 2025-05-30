@@ -11,7 +11,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <html lang="en" className="dark" style={{
             colorScheme: "dark"
         }}>
-            <body className="__variable_1e4310 __variable_c3aa02 antialiased" cz-shortcut-listen="true">
+            <body className="min-h-screen bg-background font-sans antialiased __variable_852510"
+                cz-shortcut-listen="true"
+            >
                 {children}
             </body>
         </html >
