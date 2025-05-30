@@ -153,30 +153,25 @@ export default async function BlogsPage() {
 
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {[
-              { name: "Technology", count: 42, image: "/placeholder.svg?height=200&width=300&text=Technology" },
-              { name: "Design", count: 28, image: "/placeholder.svg?height=200&width=300&text=Design" },
-              { name: "Business", count: 35, image: "/placeholder.svg?height=200&width=300&text=Business" },
-              { name: "Marketing", count: 19, image: "/placeholder.svg?height=200&width=300&text=Marketing" },
-              { name: "Productivity", count: 23, image: "/placeholder.svg?height=200&width=300&text=Productivity" },
-              { name: "Career", count: 31, image: "/placeholder.svg?height=200&width=300&text=Career" },
-              { name: "AI", count: 17, image: "/placeholder.svg?height=200&width=300&text=AI" },
-              { name: "Development", count: 39, image: "/placeholder.svg?height=200&width=300&text=Development" },
+              { name: "Development", color: "border-blue-500" },
+              { name: "Design", color: "border-purple-500" },
+              { name: "Marketing", color: "border-yellow-500" },
+              { name: "Business", color: "border-green-500" },
+              { name: "Education", color: "border-red-500" },
+              { name: "Lifestyle", color: "border-indigo-500" },
+              { name: "Artificial Intelligence", color: "border-pink-500" },
+              { name: "Branding", color: "border-teal-500" },
             ].map((category, i) => (
               <FadeIn key={category.name} delay={i * 0.1}>
                 <Link href={`/blogs?category=${category.name.toLowerCase()}`}>
-                  <div className="group relative overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md">
-                    <div className="relative h-40">
-                      <Image
-                        src={category.image || "/placeholder.svg"}
-                        alt={category.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
+                  <div className={`group relative overflow-hidden rounded-lg border-l-4 bg-card text-card-foreground shadow-sm transition-all hover:shadow-md ${category.color}`}>
+                    <div className="relative h-24">
                       <div className="absolute inset-0 bg-black/50 transition-opacity group-hover:opacity-70" />
-                      <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-white">
-                        <h3 className="text-xl font-bold">{category.name}</h3>
-                        <p className="text-sm">{category.count} articles</p>
-                        <ArrowRight className="mt-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                      <div className="absolute inset-0 flex items-center p-4 text-white">
+                        <div className="flex justify-between w-full items-center">
+                          <h3 className="text-xl font-bold">{category.name}</h3>
+                          <ArrowRight className="mt-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                        </div>
                       </div>
                     </div>
                   </div>
