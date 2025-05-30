@@ -6,7 +6,7 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 import { Heart, MessageCircle, Share2 } from "lucide-react"
 import { Badge } from "@/Components/ui/badge"
-import { Button } from "@/Components/ui/button"
+import { Button } from "@/Components/ui/Button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
 import { cn } from "@/lib/utils"
 
@@ -53,8 +53,8 @@ export default function BlogCard({
                 const result = await response.json()
                 if (response.ok) {
                     setLiked(result.isLiked)
-                } else {
-                    console.error(result.message || "Failed to fetch like status.")
+                } else {    
+                    console.warn(result.message || "Failed to fetch like status.")
                 }
             } catch (error) {
                 console.error("Error fetching like status:", error)
